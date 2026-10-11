@@ -44,5 +44,5 @@ SYSTEM_PERMISSIONS = [
 ROLE_GRANTS = {
     "employee": ["leave_management.application.view_self", "leave_management.application.create"],
     "manager": ["leave_management.application.view", "leave_management.application.review"],
-    "admin": PERMISSIONS,
+    "admin": [code for code, _ in PERMISSIONS if code not in SYSTEM_PERMISSIONS],
 }
