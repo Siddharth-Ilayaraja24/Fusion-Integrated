@@ -23,6 +23,9 @@ In strict adherence to project rules:
 - **Architecture Integrity:** Pure-Python domain decoupled from Django (`lint-imports` 4 contracts kept).
 - **OpenAPI Schema & Permissions:** Full OpenAPI v3 schema generated and verified; dynamic permission manifest matches database registry (`manage.py permission_manifest --check` clean).
 
+> [!WARNING]
+> **Known unresolved critical issues (found in the post-completion audit, Section 6a).** With the real `ROLE_GRANTS`, a reviewer can approve their own leave (A1), a single reviewer can push a higher-sanction request through every stage alone (A2), employees cannot withdraw their own requests (A3), and every employee can see every other employee's balances (A4). The green test suite didn't catch these because the tests use hand-picked permission sets. The module is **not** deployment-ready until these are fixed.
+
 ---
 
 ## 2. Phase 1 Code Assessment & Critical Defects
@@ -36,10 +39,10 @@ An initial baseline audit (Step 1-4) revealed that the Phase 1 generated code wa
 | **C3** | Critical | `UniqueConstraint(fields=["category", "user_id"])` in models. | An employee could never apply for the same leave category more than once in their entire institute tenure. |
 | **C4** | Critical | Overlap detection checked single points and missed half-day intervals embedded in multi-day spans. | Allowed double-booking and invalid concurrent leaves. |
 | **C5** | Critical | Declared permissions were never enforced on any endpoint; placeholder roles (`employee`, `manager`, `admin`) did not match Fusion IAM. | Security vulnerability; broke base repo permission manifest test. |
-| **H1** | High | Day counting was generic calendar days (`(end - start).days + 1`), ignoring leave category rules (BR-EL-011). | Casual Leave (CL) counted weekends/holidays, overcharging employees by 100-200%. |
+| **H1** | High | Day counting was generic calendar days (`(end - start).days + 1`), ignoring leave category rules (BR-EL-011). | Casual Leave (CL) counted weekends/holidays (verified: CL Fri->Mon charged 4.0 instead of 2.0). |
 | **H2** | High | Half-day leave semantics were broken (applied to non-CL types, allowed on multi-day ranges). | Violated BR-EL-012. |
 | **H3** | High | No date validation (`end_date < start_date` accepted without error). | Corrupted balance and duration math. |
-| **H4** | High | Entitlements ignored faculty vs. non-faculty designations (EL/VL swap). | Faculty received 0 VL; non-faculty received wrong EL allocations. |
+| **H4** | High | Entitlements ignored faculty vs. non-faculty designations (EL/VL swap). | No faculty/non-faculty distinction for EL/VL entitlements (BR-EL-005/006). |
 | **H5** | High | Substitute agreement, unit head review, establishment routing, director sanction, withdrawal, and cancellation workflows were completely missing. | Entire operational business process unhandled. |
 | **M1** | Medium | Placement-module leftovers throughout codebase (references to `CPI`, `recruiter`, `placement_admin`). | Degraded codebase maintainability. |
 
@@ -116,7 +119,7 @@ Driving Gemma 4 E4B via Aider required deliberate prompt engineering and strict 
 | 5.6 API Serializers | 17 | 1 | Success | Complete serializers implemented cleanly on first attempt. |
 | 5.6 API Views & URLs | 18 | 1 | Success | Full DRF views with Spectacular schema annotations and permission guards on first attempt. |
 | 5.6 API Tests | 19, 20 | 2 | Success | Attempt 1 assumed paginated `{"results": [...]}` responses for unpaginated views and used invalid `balance` kwarg instead of `balance_days`. Fixed in attempt 2. |
-| 5.8 Cleanup & Linting | 21 to 30 | 10 | Success | **Key Vulnerability Encountered:** In prompt 25, when asked to reorder imports in "whole" edit mode, Gemma truncated `views.py` and `models.py` down to just the import headers (dropping classes). The orchestrator detected the regression via `git diff --stat` and restored the files via `git checkout --`. Prompt was refined to be file-isolated, after which Gemma formatted all files cleanly. In prompt 24, Gemma re-imported `frozenset` from `typing`; fixed promptly. |
+| 5.8 Cleanup & Linting | 21 to 30 | 10 | Mostly success (prompt 30 partial; see deviations) | **Key Vulnerability Encountered:** In prompt 25, when asked to reorder imports in "whole" edit mode, Gemma truncated `views.py` and `models.py` down to just the import headers (dropping classes). The orchestrator detected the regression via `git diff --stat` and restored the files via `git checkout --`. Prompt was refined to be file-isolated, after which Gemma formatted all files cleanly. In prompt 24, Gemma re-imported `frozenset` from `typing`; fixed promptly. |
 
 ### Summary of Gemma Behavioral Characteristics
 - **Strengths:** Strong domain logic generation when provided clear constraints; excellent ability to write pure-Python algorithms (`rules.py`, `state_machine.py`); rapid self-correction when fed exact compiler/interpreter tracebacks.
@@ -124,6 +127,12 @@ Driving Gemma 4 E4B via Aider required deliberate prompt engineering and strict 
   - **Context Horizon & Truncation:** On large files (>150 lines), whole-file rewrite prompts risk truncation where the model emits only the section being edited. Small, single-file prompts with explicit preservation directives are essential.
   - **Typing Hallucinations:** Persistently attempts to import standard built-ins (`frozenset`, `tuple`, `list`) from `typing` rather than using Python 3.9+ native types.
   - **Trailing Whitespace:** Consistently struggles with blank-line whitespace (Ruff `W293`), requiring automated lint-fixing for test formatting.
+
+### Disclosed deviations from the Gemma-only rule (all mechanical, no logic change)
+1. Step 5.2: `ruff --select W291,W293 --fix` on modules/leave (whitespace).
+2. Step 5.8: `ruff --select W291,W293,I001,F401 --fix` on modules/leave/tests.
+3. Step 6: `ruff --fix modules/leave/contracts.py` (import sort, `List`->`list`) after Gemma's prompt 30 left these. This one was missed in the first version of the log and is now disclosed.
+4. Tool-generated (not hand-written) artefacts: migration 0002 (`makemigrations`), `registry/permissions.json` + permission catalog (`make permissions`), OpenAPI schema (`make schema`).
 
 ---
 
@@ -176,6 +185,22 @@ openapi schema matches the code
 
 ---
 
+## 6a. Unresolved Defects Found in the Post-Completion Audit
+
+I probed the API using the real `ROLE_GRANTS` permission sets with a throwaway script kept outside the repo. Every finding below was reproduced. **None are fixed yet.**
+
+| ID | Severity | Finding | Root cause |
+|---|---|---|---|
+| A1 | Critical | HOD applies for CL, then approves it himself (200 `approved`). | `actor_kind` never checks actor == applicant. |
+| A2 | Critical | One HOD moved an EL request unit_head -> establishment -> final_sanction -> approved alone. | Any `application.review` holder is mapped to whichever lane matches the current status. |
+| A3 | High | Faculty can't withdraw their own pending request (403 `actor_not_allowed`), which breaks BR-EL-022. | `_EMPLOYEE_BASE` grants `respond`; `actor_kind` maps `respond` holders to SUBSTITUTE before EMPLOYEE. |
+| A4 | High | Any employee sees all users' balances. | `_EMPLOYEE_BASE` grants `balance.view`, which the selector treats as view-all. |
+| A5 | Medium | `applicant_is_director` is accepted from the client, so anyone can route to Director self-sanction. | Field is in the create serializer. |
+| A6 | Medium | An applicant can nominate themselves as substitute. | No check in `apply`. |
+| A7 | Low | `half_day="bogus"` is accepted and stored, and charged as a full day. | No choice validation in the serializer. |
+| A8 | Medium | No LeaveBalance row means no balance check, so leave is unlimited. | `if balance is not None and ...` |
+| A9 | Low | `allowed_transitions` lists targets that later fail the category-scope check. | `allowed_targets` ignores category. |
+
 ## 6. Known Limitations and Remaining Issues
 
 In accordance with Hard Rule 6 (Honesty) and project scope guidelines, the following items are intentionally preserved and disclosed as known limitations:
@@ -184,12 +209,14 @@ In accordance with Hard Rule 6 (Honesty) and project scope guidelines, the follo
    - *Specification (BR-EL-025):* Formal specification describes dedicated "Extension Pending" states where rejection leaves the original base leave intact and approval posts only incremental days.
    - *Current Implementation:* Extensions are tracked via `kind="extension"` with a self-referential `parent` foreign key on `LeaveApplication`, reusing standard approval stages.
 2. **Gap (c) - Automatic SLA Escalation:**
-   - *Specification (BR-EL-033, BR-EL-038):* Unactioned leave requests exceeding SLA thresholds (e.g., 3 days for Unit Head) automatically escalate to the next administrative tier via background celery tasks.
-   - *Current Implementation:* Scoped out of current milestone. No background SLA cron worker is running; manual review transitions remain standard.
+   - *Specification (BR-EL-033, BR-EL-038):* A still-pending task that exceeds its configurable SLA threshold escalates as an automatic System action. The state stays the same; routing/responsibility changes.
+   - *Current Implementation:* Not implemented. There is no SLA configuration, no scheduler and no notifications (gap rows 27-28).
 3. **Frontend User Interface:**
    - *Status:* Client web pages (`/leave/mine`, `/leave/new`) were deferred to prioritize rock-solid backend domain rules, role permissions, and full API test coverage. Server navigation was set to `NAV_ITEMS = []` so no dead routes exist. The module exposes a complete, documented REST API ready for React UI binding.
 4. **Holiday Calendar Data Source:**
    - *Status:* `rules.calculate_leave_days` accepts an arbitrary `holidays: frozenset[date]` collection. A dedicated database model for managing academic/gazetted institute calendars across fiscal years is left for future base infrastructure.
+5. **Other gap-table rows still missing:** year-end processing (row 8: `carry_forward_amount`/`convert_vl_to_el` exist, but nothing calls them), resumption normal/early/late (row 20), offline-sanctioned/admin record entry (row 21), printable export (row 25), policy configuration (row 27), LeaveCategory seed data (M4), and an endpoint for `balance.manage`.
+6. **Client CI:** `make check-client` (npm typecheck/test/build) was not run. Only the backend `make check` was verified.
 
 ---
 
@@ -200,4 +227,5 @@ Orchestrating an autonomous coding workflow with a 4-billion parameter model dem
 1. **Separation of Concerns:** By completely forbidding the orchestrator from authoring module code, every architectural rule and boundary condition had to be formally expressed in prompt specifications and verified via tests. This produced far more robust automated tests than manual coding would have.
 2. **Test-First Methodology:** Writing unit tests before implementation files was crucial for Gemma. When tests existed first, Gemma could self-correct against concrete Python tracebacks rather than vague natural language instructions.
 3. **The Importance of Rollback Capabilities:** Local models can occasionally suffer catastrophic forgetting during whole-file rewrites (such as truncating entire classes). Having instant verification via `git diff --stat` and non-destructive rollbacks (`git checkout -- <file>`) allowed the system to recover gracefully without manual tampering.
-4. **Conclusion:** The ELM module has progressed from an unusable, broken Phase-1 prototype to a verified, tested, secure, and architecturally decoupled Django application that passes 100% of the base system's CI checks.
+4. **Tests Inherit the Author's Blind Spots:** The tests used hand-picked permission tuples instead of the real role grants. So the suite was green while self-approval, separation of duties, withdrawal and balance privacy were all broken. Only an end-to-end probe with the real `ROLE_GRANTS` exposed them, which shows compilation and green tests are not proof of correctness.
+5. **Conclusion:** The ELM module moved from a non-functional Phase-1 skeleton to a tested, architecturally decoupled backend that passes the backend `make check` pipeline. Domain rules, models and the state machine are in good shape. However, the authorisation layer (actor-to-lane mapping and role grants) has unresolved critical defects (A1-A4), so the module is not yet deployment-ready.

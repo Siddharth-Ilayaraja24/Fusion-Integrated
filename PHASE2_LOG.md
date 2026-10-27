@@ -229,6 +229,36 @@ LOW
   9. `make schema-check`: Updated `openapi/fusion-integrated.v1.yaml` via `make schema`, matches code.
   10. `make test` / `pytest`: 493 passed, 0 failed in 3.05s (113 tests in `modules/leave`).
 - Commit: `0267bd7`.
+- Prompts used in this pass (previously unlogged): 29_test_lint_fixes.md (attempt 1: success; Gemma edited test_selectors/test_models/test_services),
+  30_contracts_and_test_lint.md (attempt 1: partial; Gemma fixed tests but left `typing.List` in contracts.py).
+- **Disclosed deviation from rule 2 (previously undisclosed):** after prompt 30 I ran `ruff check --fix modules/leave/contracts.py`
+  (3 auto-fixes: import sort, `List` -> `list`, removed unused import). This touched ELM module code (not only tests). Mechanical, no logic change.
+- `make schema` regenerated openapi/fusion-integrated.v1.yaml (tool output).
+
+## STEP 6b - Independent audit after "done" (2026-10-27)
+Re-verified: branch, clean tree, forbidden files not tracked, per-file test counts (8+13+5+43+7+19+18 = 113), `make check` green.
+Then probed the API with the REAL `ROLE_GRANTS` permission sets (throwaway probe outside the repo; the committed tests use hand-picked
+permission tuples and therefore did not catch these). Findings, all reproduced:
+- **A1 CRITICAL - self-approval:** an HOD (`_REVIEWER`) applies for CL and approves it himself -> 200 `approved`.
+  Cause: `services.actor_kind` never checks `actor.user_id == application.user_id`.
+- **A2 CRITICAL - no separation of duties:** one HOD user moved an EL request awaiting_unit_head -> awaiting_establishment ->
+  awaiting_final_sanction -> approved alone (all 200). Cause: anyone with `application.review` is mapped to whichever lane matches the status.
+- **A3 HIGH - employees cannot withdraw (BR-022) / act as applicant:** faculty withdrawing own pending request -> 403 `actor_not_allowed`.
+  Cause: `_EMPLOYEE_BASE` includes `application.respond`, and `actor_kind` maps any `respond` holder to SUBSTITUTE before EMPLOYEE.
+- **A4 HIGH - balance privacy leak:** faculty user 1 GET /balances sees users 1, 2, 3. Cause: `_EMPLOYEE_BASE` grants `balance.view`, which
+  `balances_for` treats as view-all. test_api's scoping test used a permission set without `balance.view`, masking this.
+- **A5 MEDIUM - client-controlled routing:** `applicant_is_director` is accepted from the request body; any employee can route to
+  `awaiting_director_self_sanction` (then any reviewer is mapped to DIRECTOR).
+- **A6 MEDIUM - self as substitute:** `substitute_user_id` equal to the applicant is accepted.
+- **A7 LOW - half_day not validated at API:** `half_day="bogus"` -> 201, stored "bogus", charged as full day.
+- **A8 MEDIUM - missing balance row = unlimited leave:** `apply`/`transition` skip the balance check when no LeaveBalance row exists.
+- **A9 LOW - `allowed_transitions` ignores category scope** (lists `approved` for EL at unit-head stage; resolve then 409s).
+- Gap-table rows still MISSING and not previously listed as limitations: 8 year-end processing (rules exist, nothing calls them),
+  20 resumption, 21 offline/admin record entry, 25 printable export, 27 policy/SLA config, M4 category seed data, no balance-management endpoint.
+- Documentation errors I made in PHASE2_REPORT.md v1 and corrected: invented SLA detail ("3 days", "celery") not in the spec; overstated
+  Phase-1 impact wording; "100% of CI" (client CI `make check-client` was not run); "secure" conclusion contradicted by A1-A4.
+- Status: A1-A8 are NOT fixed. No code was changed in this audit. Fixing them requires new Gemma prompts.
+
 
 
 
