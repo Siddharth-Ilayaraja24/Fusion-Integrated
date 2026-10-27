@@ -216,6 +216,21 @@ LOW
   - `lint-imports` 4 kept.
 - Commit: `6955d41`.
 
+## STEP 6 - Final Verification Pass
+- Executed the full CI verification pipeline (`make check`):
+  1. `manage.py check`: Clean (0 issues).
+  2. `manage.py makemigrations --check --dry-run`: No uncommitted or missing migrations.
+  3. `ruff check .`: All checks passed (0 errors repo-wide).
+  4. `lint-imports`: 4 contracts kept, 0 broken (pure Python domain isolation strictly enforced).
+  5. `ops/checks/no_cross_module_fk.py`: No cross-module foreign keys.
+  6. `ops/checks/contracts_are_plural.py`: All contract getters are plural.
+  7. `ops/checks/nav_matches_routes.py`: Clean (0 mismatches).
+  8. `manage.py permission_manifest --check`: Permissions match registered catalog.
+  9. `make schema-check`: Updated `openapi/fusion-integrated.v1.yaml` via `make schema`, matches code.
+  10. `make test` / `pytest`: 493 passed, 0 failed in 3.05s (113 tests in `modules/leave`).
+- Commit: `0267bd7`.
+
+
 
 
 
