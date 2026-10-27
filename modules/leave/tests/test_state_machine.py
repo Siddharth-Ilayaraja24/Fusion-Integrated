@@ -250,3 +250,26 @@ def test_table_integrity_and_targets():
         key = (t.frm, t.to)
         assert key not in transitions_map, f"Duplicate transition found for {key}"
         transitions_map[key] = t
+
+def test_transition_guards_present():
+    """Verify has_reason and before_start_date guards on required transitions (gap a)."""
+    # Rejections require has_reason
+    t_uh_reject = sm.resolve("awaiting_unit_head", "rejected", "unit_head", "CL")
+    assert "has_reason" in t_uh_reject.guards
+
+    t_auth_reject = sm.resolve("awaiting_final_sanction", "rejected", "authority", "EL")
+    assert "has_reason" in t_auth_reject.guards
+
+    t_dir_reject = sm.resolve("awaiting_director_self_sanction", "rejected", "director")
+    assert "has_reason" in t_dir_reject.guards
+
+    # Cancellation rejection (stay approved) requires has_reason
+    t_uh_canc_reject = sm.resolve("cancellation_pending_unit_head", "approved", "unit_head", "CL")
+    assert "has_reason" in t_uh_canc_reject.guards
+
+    t_auth_canc_reject = sm.resolve("cancellation_pending_final", "approved", "authority", "VL")
+    assert "has_reason" in t_auth_canc_reject.guards
+
+    # Cancellation initiation requires before_start_date
+    t_cancel = sm.resolve("approved", "cancellation_pending_unit_head", "employee")
+    assert "before_start_date" in t_cancel.guards
