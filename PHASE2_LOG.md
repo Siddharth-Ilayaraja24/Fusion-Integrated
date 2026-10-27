@@ -99,3 +99,20 @@ MEDIUM
 LOW
 - L1 34 ruff findings. L2 Calendar/SLA/notification features absent (rows 26-28) - scoped out, to be listed as limitations.
 
+
+## STEP 5.1 - domain/rules.py (issues C4, H1, H2, H3, H4, M3)
+- Design (human, from spec): new pure-Python API (RuleViolation, CATEGORIES, get_annual_entitlement(is_faculty), calculate_leave_days(
+  category, start, end, half_day, holidays), check_overlap(existing(start,end,half), ..., new_half), convert_vl_to_el, has_sufficient_balance,
+  carry_forward_amount). Old check_half_day_exception removed (folded into check_overlap, BR-EL-012).
+- Prompts / Gemma attempts:
+  - 01_rules_tests.md (tests first) - attempt 1: success with blemishes (dead code in one test, unused fixture).
+  - 01b_rules_tests_cleanup.md - attempt 1: success.
+  - 02_rules_impl.md (implementation) - attempt 1: success, 36/36 tests passed first run; reviewed diff, logic matches BR-EL-007/010/011/012.
+  - Mutation testing (temporary sed mutants, restored after): 4 mutants; 3 killed, 1 survived (VL/COL/SCL/RH counting untested).
+  - 01c_rules_tests_all_categories.md - attempt 1: success; mutant now killed. Final: 43 rule tests.
+- Evidence: `pytest modules/leave` 43 passed; full `pytest` 422 passed / 1 failed (same manifest failure, expected until 5.5); `manage.py check` clean;
+  lint-imports 4 kept (domain stays Django-free).
+- Verified fixes: CL Fri->Mon now 2 (was 4); half-day inside multi-day leave now overlaps (was missed); end<start raises; unknown category raises;
+  faculty/non-faculty EL/VL entitlements.
+- Open: ruff style findings in rules.py/test_rules.py (whitespace, typing.List) - to be cleaned by a Gemma lint prompt in 5.8.
+- Not covered: holiday/RH calendar source (holidays param is supplied by caller; no calendar model yet).
