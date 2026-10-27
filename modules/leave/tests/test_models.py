@@ -1,11 +1,16 @@
-import pytest
 from datetime import date
 from decimal import Decimal
+
+import pytest
 from django.db import IntegrityError, transaction
 
 from modules.leave.models import (
-    LeaveCategory, LeaveApplication, LeaveApplicationTransition, LeaveBalance
+    LeaveApplication,
+    LeaveApplicationTransition,
+    LeaveBalance,
+    LeaveCategory,
 )
+
 
 @pytest.fixture
 def cl():

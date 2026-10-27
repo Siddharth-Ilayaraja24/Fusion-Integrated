@@ -5,6 +5,7 @@ keys — there is no user table in this database.
 """
 
 from django.db import models
+
 from core.db.mixins import TimeStampedModel, UserScopedModel
 
 

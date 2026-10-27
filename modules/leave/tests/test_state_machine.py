@@ -1,4 +1,5 @@
 import pytest
+
 from modules.leave.domain import state_machine as sm
 
 # --- Test Fixtures and Setup ---

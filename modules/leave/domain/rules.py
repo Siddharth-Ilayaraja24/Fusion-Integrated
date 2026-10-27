@@ -1,12 +1,11 @@
+from collections.abc import Iterable
 from datetime import date, timedelta
 from decimal import Decimal
-from typing import List, Tuple, Iterable, Optional
 
 # --- Constants and Exceptions ---
 
 class RuleViolation(ValueError):
     """Raised when a leave rule is violated."""
-    pass
 
 CATEGORIES = ("CL", "RH", "SCL", "EL", "COL", "VL")
 
@@ -43,7 +42,7 @@ def calculate_leave_days(
     category_code: str,
     start_date: date,
     end_date: date,
-    half_day: Optional[str] = None,
+    half_day: str | None = None,
     holidays: frozenset[date] = frozenset()
 ) -> Decimal:
     """BR-EL-011/BR-EL-012: Calculates the number of leave days between two dates."""
@@ -90,10 +89,10 @@ def calculate_leave_days(
     return Decimal(total_days)
 
 def check_overlap(
-    existing: Iterable[Tuple[date, date, Optional[str]]],
+    existing: Iterable[tuple[date, date, str | None]],
     new_start: date,
     new_end: date,
-    new_half: Optional[str] = None
+    new_half: str | None = None
 ) -> bool:
     """BR-EL-012: Checks if the new leave period overlaps with any existing leave."""
 
@@ -108,10 +107,13 @@ def check_overlap(
                 new_start == existing_start
             )
 
-            if is_same_single_day and new_half is not None and existing_half is not None:
-                # Exception: different halves on same date do NOT overlap
-                if new_half != existing_half:
-                    continue  # Skip this existing leave, no overlap
+            if (
+                is_same_single_day
+                and new_half is not None
+                and existing_half is not None
+                and new_half != existing_half
+            ):
+                continue  # Skip this existing leave, no overlap
 
             # If we reach here, there is an overlap (or it's a single day with same half)
             return True

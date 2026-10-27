@@ -1,32 +1,30 @@
-import pytest
-from datetime import date, timedelta
+from datetime import date
 from decimal import Decimal
-from typing import Optional
 
-from django.utils import timezone
+import pytest
 
 pytestmark = pytest.mark.django_db
 # Assuming these modules exist and contain the necessary logic
-from modules.leave.models import (
-    LeaveCategory,
-    LeaveApplication,
-    LeaveBalance,
-    LeaveApplicationTransition,
-)
-from core.api.exceptions import ConflictError, NotFoundError, PermissionDeniedError
+from core.api.exceptions import ConflictError, PermissionDeniedError
 from modules.leave.domain.state_machine import (
-    AWAITING_UNIT_HEAD,
-    AWAITING_SUBSTITUTE,
-    AWAITING_DIRECTOR_SELF_SANCTION,
+    APPLICANT_ACTION_REQUIRED,
     APPROVED,
-    REJECTED,
-    WITHDRAWN,
+    AWAITING_DIRECTOR_SELF_SANCTION,
+    AWAITING_SUBSTITUTE,
+    AWAITING_UNIT_HEAD,
     CANCELLATION_PENDING_UNIT_HEAD,
     CANCELLED,
-    APPLICANT_ACTION_REQUIRED,
-    PENDING,
+    REJECTED,
+    WITHDRAWN,
+)
+from modules.leave.models import (
+    LeaveApplication,
+    LeaveApplicationTransition,
+    LeaveBalance,
+    LeaveCategory,
 )
 from modules.leave.services import applications as leave_services
+
 
 # --- Helper Principal ---
 class DummyPrincipal:
@@ -154,10 +152,10 @@ def test_actor_kind_director(director_app):
 def test_apply_cl_happy_path(cl_cat, cl_balance, user_principal):
     start_date = date(2026, 11, 2)
     end_date = date(2026, 11, 3)
-    
+
     # Mock balance check to ensure it passes for this test
     # In a real scenario, the service would check the balance
-    
+
     app = leave_services.apply(
         user_id=user_principal.user_id,
         category_code=cl_cat.code,
@@ -169,7 +167,7 @@ def test_apply_cl_happy_path(cl_cat, cl_balance, user_principal):
     assert app.status == AWAITING_UNIT_HEAD
     assert app.days_charged == Decimal("2.0")
     assert app.balance_deducted == Decimal("0.0")
-    
+
     # Check transition record
     transitions = LeaveApplicationTransition.objects.filter(
         application=app
@@ -264,7 +262,7 @@ def test_apply_insufficient_balance_raises(cl_cat, cl_balance, user_principal):
 @pytest.mark.django_db
 def test_transition_unit_head_approve_cl_deducts_balance(cl_cat, cl_balance, application_instance, user_principal):
     # Application starts in AWAITING_UNIT_HEAD
-    
+
     # Unit Head principal (assuming permission P_REVIEW)
     uh_principal = DummyPrincipal(user_id=2, permissions=["leave_management.application.review"])
 
@@ -278,7 +276,7 @@ def test_transition_unit_head_approve_cl_deducts_balance(cl_cat, cl_balance, app
 
     assert app.status == APPROVED
     assert app.balance_deducted == Decimal("2.0")
-    
+
     # Check balance deduction
     balance = LeaveBalance.objects.get(
         category=cl_cat, user_id=1, year=2026
@@ -333,7 +331,7 @@ def test_transition_substitute_accept_and_decline(cl_cat, user_principal):
         resumption_status="none",
         status=AWAITING_SUBSTITUTE,
     )
-    
+
     sub_principal = DummyPrincipal(user_id=99, permissions=["leave_management.application.respond"])
 
     # 1. Substitute accepts
@@ -364,7 +362,7 @@ def test_transition_substitute_accept_and_decline(cl_cat, user_principal):
 @pytest.mark.django_db
 def test_transition_withdraw_pending(cl_cat, application_instance, user_principal):
     # Application starts in AWAITING_UNIT_HEAD
-    
+
     # Employee principal (applicant)
     employee_principal = DummyPrincipal(user_id=1, permissions=["leave_management.application.delete"])
 
@@ -400,7 +398,7 @@ def test_transition_cancellation_restores_balance(cl_cat, cl_balance, user_princ
         resumption_status="none",
         status=APPROVED,
     )
-    
+
     # Verify initial balance before cancellation
     balance = LeaveBalance.objects.get(category=cl_cat, user_id=1, year=2026)
     assert balance.balance_days == Decimal("6.0")
@@ -425,7 +423,7 @@ def test_transition_cancellation_restores_balance(cl_cat, cl_balance, user_princ
     )
     assert app.status == CANCELLED
     assert app.balance_deducted == Decimal("0.0") # Balance should be reset
-    
+
     # Check balance restoration
     balance = LeaveBalance.objects.get(
         category=cl_cat, user_id=1, year=2026

@@ -6,10 +6,10 @@ from collections.abc import Sequence
 from datetime import date
 from decimal import Decimal
 
-from django.db import models, transaction
+from django.db import transaction
 from django.utils import timezone
 
-from core.api.exceptions import ConflictError, DomainError, NotFoundError, PermissionDeniedError
+from core.api.exceptions import ConflictError, NotFoundError, PermissionDeniedError
 from modules.leave.domain import rules
 from modules.leave.domain import state_machine as sm
 from modules.leave.models import (
@@ -47,18 +47,28 @@ def actor_kind(actor, application=None, role: str | None = None) -> str:
         return sm.ESTABLISHMENT
     if "unit_head" in roles or "hod" in roles:
         return sm.UNIT_HEAD
-    if getattr(actor, "has_permission", lambda p: False)("leave_management.application.review"):
+    if getattr(actor, "has_permission", lambda p: False)(
+        "leave_management.application.review"
+    ):
         if application is not None:
-            if application.status in (sm.AWAITING_UNIT_HEAD, sm.CANCELLATION_PENDING_UNIT_HEAD):
+            if application.status in (
+                sm.AWAITING_UNIT_HEAD, sm.CANCELLATION_PENDING_UNIT_HEAD
+            ):
                 return sm.UNIT_HEAD
-            if application.status in (sm.AWAITING_ESTABLISHMENT, sm.CANCELLATION_PENDING_ESTABLISHMENT):
+            if application.status in (
+                sm.AWAITING_ESTABLISHMENT, sm.CANCELLATION_PENDING_ESTABLISHMENT
+            ):
                 return sm.ESTABLISHMENT
-            if application.status in (sm.AWAITING_FINAL_SANCTION, sm.CANCELLATION_PENDING_FINAL):
+            if application.status in (
+                sm.AWAITING_FINAL_SANCTION, sm.CANCELLATION_PENDING_FINAL
+            ):
                 return sm.AUTHORITY
             if application.status == sm.AWAITING_DIRECTOR_SELF_SANCTION:
                 return sm.DIRECTOR
         return sm.UNIT_HEAD
-    if getattr(actor, "has_permission", lambda p: False)("leave_management.application.respond"):
+    if getattr(actor, "has_permission", lambda p: False)(
+        "leave_management.application.respond"
+    ):
         return sm.SUBSTITUTE
     return sm.EMPLOYEE
 
@@ -71,16 +81,16 @@ def resolve_or_raise(frm: str, to: str, kind: str, category_code: str) -> sm.Tra
         raise ConflictError(
             f"An application cannot move from '{exc.frm}' to '{exc.to}'.",
             code="invalid_transition"
-        )
+        ) from exc
     except sm.ActorNotAllowed as exc:
         raise PermissionDeniedError(
             "Your role cannot make that change.", code="actor_not_allowed"
-        )
+        ) from exc
     except sm.ScopeMismatch as exc:
         raise ConflictError(
             f"Category '{exc.category_code}' cannot make this transition "
             f"(scope '{exc.scope}').", code="scope_mismatch"
-        )
+        ) from exc
 
 
 @transaction.atomic
@@ -109,8 +119,8 @@ def apply(*, user_id: int, category_code: str, start_date: date, end_date: date,
 
     try:
         category = LeaveCategory.objects.get(code=category_code)
-    except LeaveCategory.DoesNotExist:
-        raise NotFoundError(f"Leave category {category_code} not found.")
+    except LeaveCategory.DoesNotExist as exc:
+        raise NotFoundError(f"Leave category {category_code} not found.") from exc
 
     days = rules.calculate_leave_days(
         category_code, start_date, end_date, half_day=half_day_val,
@@ -191,11 +201,10 @@ def transition(*, application_id: int, to_status: str, actor, reason: str = "",
     kind = actor_kind(actor, app, role=role)
     t = resolve_or_raise(app.status, to_status, kind, app.category.code)
 
-    if actor is not None and getattr(actor, "has_permission", None) is not None:
-        if not actor.has_permission(t.permission):
-            raise PermissionDeniedError(
-                f"This action needs {t.permission}.", code="permission_denied"
-            )
+    if actor and getattr(actor, "has_permission", None) and not actor.has_permission(t.permission):
+        raise PermissionDeniedError(
+            f"This action needs {t.permission}.", code="permission_denied"
+        )
 
     # Guards
     if t.guards:

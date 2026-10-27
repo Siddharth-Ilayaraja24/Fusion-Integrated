@@ -1,5 +1,12 @@
 import unittest
-from modules.leave.registry import MODULE, PERMISSIONS, SYSTEM_PERMISSIONS, ROLE_GRANTS, _EMPLOYEE_BASE, _REVIEWER, _ADMIN
+
+from modules.leave.registry import (
+    MODULE,
+    PERMISSIONS,
+    ROLE_GRANTS,
+    SYSTEM_PERMISSIONS,
+)
+
 
 class TestLeaveRegistry(unittest.TestCase):
 
@@ -27,7 +34,7 @@ class TestLeaveRegistry(unittest.TestCase):
 
     def test_all_role_grants_are_declared(self):
         declared_permissions = {code for code, _ in PERMISSIONS}
-        
+
         for roles in ROLE_GRANTS.values():
             for code in roles:
                 self.assertIn(code, declared_permissions, f"Role grants contain undeclared permission: {code}")

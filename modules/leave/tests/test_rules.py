@@ -1,6 +1,8 @@
-import pytest
 from datetime import date
 from decimal import Decimal
+
+import pytest
+
 from modules.leave.domain import rules
 
 # --- Fixtures and Setup ---

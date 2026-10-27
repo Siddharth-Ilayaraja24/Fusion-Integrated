@@ -1,10 +1,16 @@
 """Tests for leave API endpoints."""
-import pytest
-from rest_framework.test import APIClient
 from datetime import date
 
+import pytest
+from rest_framework.test import APIClient
+
 from conftest import make_session
-from modules.leave.models import LeaveCategory, LeaveApplication, LeaveBalance, LeaveApplicationTransition
+from modules.leave.models import (
+    LeaveApplication,
+    LeaveApplicationTransition,
+    LeaveBalance,
+    LeaveCategory,
+)
 
 pytestmark = pytest.mark.django_db
 
@@ -40,7 +46,7 @@ def test_categories_endpoint(stub_iam):
 
 def test_balances_endpoint_scopes_to_own(stub_iam):
     cl = LeaveCategory.objects.create(code="CL", name="Casual Leave")
-    
+
     # User 1 balance
     LeaveBalance.objects.create(user_id=1, category=cl, year=2026, balance_days=8.0)
     # User 2 balance
@@ -49,7 +55,7 @@ def test_balances_endpoint_scopes_to_own(stub_iam):
     # Client authenticated as user 1 (only view_self permission)
     c = _client(stub_iam, user_id=1, permissions=("leave_management.application.view_self",))
     response = c.get("/api/v1/leave/balances")
-    
+
     assert response.status_code == 200
     data = response.json()
     assert len(data) == 1
@@ -58,19 +64,19 @@ def test_balances_endpoint_scopes_to_own(stub_iam):
 
 def test_apply_endpoint_success(stub_iam):
     cl = LeaveCategory.objects.create(code="CL", name="Casual Leave")
-    
+
     # Setup user 1 balance
     LeaveBalance.objects.create(user_id=1, category=cl, year=2026, balance_days=8.0)
 
     c = _client(stub_iam, user_id=1)
     payload = {
-        "category_code": "CL", 
-        "start_date": "2026-11-02", 
-        "end_date": "2026-11-03", 
+        "category_code": "CL",
+        "start_date": "2026-11-02",
+        "end_date": "2026-11-03",
         "reason": "Personal work"
     }
     response = c.post("/api/v1/leave/applications/apply", data=payload)
-    
+
     assert response.status_code == 201
     assert response.json()["status"] == "awaiting_unit_head"
 
@@ -81,13 +87,13 @@ def test_apply_endpoint_invalid_dates(stub_iam):
 
     c = _client(stub_iam, user_id=1)
     payload = {
-        "category_code": "CL", 
-        "start_date": "2026-11-03", 
-        "end_date": "2026-11-02", 
+        "category_code": "CL",
+        "start_date": "2026-11-03",
+        "end_date": "2026-11-02",
         "reason": "Invalid dates"
     }
     response = c.post("/api/v1/leave/applications/apply", data=payload)
-    
+
     assert response.status_code == 409
 
 
@@ -126,11 +132,11 @@ def test_transition_endpoint_approve(stub_iam):
     # Client authenticated as reviewer (user_id=2)
     c = _client(stub_iam, user_id=2, permissions=("leave_management.application.review", "leave_management.application.view"))
     payload = {
-        "to_status": "approved", 
+        "to_status": "approved",
         "reason": "Approved by HOD"
     }
     response = c.post(f"/api/v1/leave/applications/{app.id}/transition", data=payload)
-    
+
     assert response.status_code == 200
     assert response.json()["status"] == "approved"
 
@@ -141,14 +147,14 @@ def test_application_history(stub_iam):
 
     # Create application and transition it
     app = LeaveApplication.objects.create(user_id=1, category=cl, start_date=date(2026, 11, 2), end_date=date(2026, 11, 3), reason="Personal", status="approved")
-    
+
     # Transition it (using a reviewer user_id=2)
     LeaveApplicationTransition.objects.create(application=app, from_status="awaiting_unit_head", to_status="approved", actor_user_id=2, reason="Approved")
 
     # Client as user 1 views history
     c1 = _client(stub_iam, user_id=1, permissions=("leave_management.application.view_self",))
     response = c1.get(f"/api/v1/leave/applications/{app.id}/history")
-    
+
     assert response.status_code == 200
     assert len(response.json()) >= 1
 
@@ -157,5 +163,5 @@ def test_unauthenticated_request_rejected(stub_iam):
     # Client without credentials
     c = APIClient()
     response = c.get("/api/v1/leave/categories")
-    
+
     assert response.status_code == 401

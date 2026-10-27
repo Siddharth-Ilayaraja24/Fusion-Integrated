@@ -1,12 +1,13 @@
-import pytest
-from unittest.mock import MagicMock
 from datetime import date
 from decimal import Decimal
+
+import pytest
 
 pytestmark = pytest.mark.django_db
 
 from modules.leave.models import LeaveApplication, LeaveBalance, LeaveCategory
 from modules.leave.selectors.applications import applications_for, balances_for
+
 
 # Helper class for testing
 class DummyPrincipal:
