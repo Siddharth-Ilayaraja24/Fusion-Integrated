@@ -145,7 +145,7 @@ LOW
 - Evidence: `pytest modules/leave` 73 passed (43 rules + 13 models + 17 state machine); `manage.py check` clean; `lint-imports` 4 kept (domain remains pure Python and decoupled from Django).
 - Verified: initial_state logic, CL/RH approval paths, higher-sanction routing and scope guards, substitute decline/replace loop, director path, actor authorization enforcement, withdrawal from all pending states, terminal states non-exit, cancellation transitions.
 - Open gaps recorded:
-  - Gap (a): No tests for the `has_reason` guard or `before_start_date` guard.
+  - Gap (a): [RESOLVED] Tested `has_reason` and `before_start_date` guards on transitions in `test_state_machine.py` via prompt 07 (attempt 1, verified by pytest 74 passed).
   - Gap (b): Extension requests: spec defines distinct "Extension Pending" states (BR-EL-025; rejection leaves the original leave unchanged, approval posts only the incremental period), but current table reuses normal pending states with kind="extension" and nothing tests it. (To be listed as limitation in final report if unfixed).
   - Gap (c): SLA escalation (spec section 6, BR-EL-033/038): automatic System transition, same state but routing/responsibility changes; not implemented. (To be listed as limitation in final report if unfixed).
 
