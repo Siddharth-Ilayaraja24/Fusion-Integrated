@@ -149,3 +149,15 @@ LOW
   - Gap (b): Extension requests: spec defines distinct "Extension Pending" states (BR-EL-025; rejection leaves the original leave unchanged, approval posts only the incremental period), but current table reuses normal pending states with kind="extension" and nothing tests it. (To be listed as limitation in final report if unfixed).
   - Gap (c): SLA escalation (spec section 6, BR-EL-033/038): automatic System transition, same state but routing/responsibility changes; not implemented. (To be listed as limitation in final report if unfixed).
 
+## STEP 5.4 - selectors and services (issues C1, C4, H2, H5, gap rows 13-21, 24)
+- Selectors: `modules/leave/selectors/applications.py` providing `applications_for(actor)` and `balances_for(actor)`.
+  - Prompts: 08_selectors_tests.md, 08b_selectors_tests_fix.md, 09_selectors_impl_fix.md.
+  - Ownership filtering: principals with view permission see all; applicants see own; substitutes see assigned applications; anonymous gets empty queryset.
+  - Evidence: `pytest modules/leave/tests/test_selectors.py` 7 passed.
+- Services: `modules/leave/services/applications.py` providing `actor_kind`, `apply`, `transition`.
+  - Prompts: 10_services_tests.md, 10b_services_tests_cleanup.md, 10c_services_tests_fix2.md, 10d_syntax_fix.md, 11_services_impl.md, 12_services_fix.md, 13_services_error_msg.md, 14_test_services_alignment.md, 15_services_check_overlap_fix.md.
+  - Features verified: date validation, CL half-day validation, dynamic days calculation via domain rules, active application overlap prevention, balance check before submission, initial state routing (standard/substitute/director), atomic transition execution, role/permission authorization, guard checks (has_reason, before_start_date, recommendation_recorded, substitute response), balance deduction on approval, balance restoration on cancellation, audit transition recording.
+  - Evidence: `pytest modules/leave/tests/test_services.py` 19 passed.
+- Overall Step 5.4 Evidence: `pytest modules/leave` = 100 passed (43 rules, 13 models, 18 state machine, 7 selectors, 19 services); `manage.py check` clean; `lint-imports` 4 kept.
+
+
