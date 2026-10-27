@@ -131,3 +131,21 @@ LOW
   single-day, balance>=0; placement leftovers removed; COL label fixed.
 - Test attempt 1 had a test bug (duplicated fixture row, my traceback fed back, attempt 2 fixed).
 - Evidence: leave tests 56 pass (43 rules + 13 models). Full suite: 1 failed (manifest, expected until 5.5), rest pass.
+
+## STEP 5.3 - domain/state_machine.py (issues C1, C2, gap rows 9, 11, 13-18)
+- Reference: Workflow Specifications v1.6 (CW-EL-01, CW-EL-02, CW-EL-03; BR-EL-016..020, 022, 023, 025).
+- Helper artifact: `phase2_prompts/_state_table.md` transcribing the workflow state-transition tables into a declarative matrix.
+- Pure Python domain state machine with 13 states, typed Transition dataclass, resolve/is_legal/allowed_targets/initial_state.
+- Prompts / Gemma attempts:
+  - 05_state_machine_tests.md (tests first) - attempt 1: produced test suite, but had a contradictory test assertion and fixture issue.
+  - 05b_state_machine_tests_fix.md - attempt 2: fixed self-contradictory scope test and added cancellation scope test.
+  - 05c_state_machine_tests_fix2.md - attempt 3: fixed fixture error (`sm` declared as argument instead of module import). 17 tests collected.
+  - 06_state_machine_impl.md (implementation) - attempt 1: implemented state machine, failed import on `from typing import frozenset, tuple`.
+  - 06b_state_machine_fix.md - attempt 2: removed typing import for builtins, all 17 tests passed first run.
+- Evidence: `pytest modules/leave` 73 passed (43 rules + 13 models + 17 state machine); `manage.py check` clean; `lint-imports` 4 kept (domain remains pure Python and decoupled from Django).
+- Verified: initial_state logic, CL/RH approval paths, higher-sanction routing and scope guards, substitute decline/replace loop, director path, actor authorization enforcement, withdrawal from all pending states, terminal states non-exit, cancellation transitions.
+- Open gaps recorded:
+  - Gap (a): No tests for the `has_reason` guard or `before_start_date` guard.
+  - Gap (b): Extension requests: spec defines distinct "Extension Pending" states (BR-EL-025; rejection leaves the original leave unchanged, approval posts only the incremental period), but current table reuses normal pending states with kind="extension" and nothing tests it. (To be listed as limitation in final report if unfixed).
+  - Gap (c): SLA escalation (spec section 6, BR-EL-033/038): automatic System transition, same state but routing/responsibility changes; not implemented. (To be listed as limitation in final report if unfixed).
+
