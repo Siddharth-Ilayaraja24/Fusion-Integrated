@@ -40,8 +40,8 @@ def make_app():
 @pytest.mark.django_db
 def test_same_user_can_apply_twice_for_same_category(cl, make_app):
     """Test that a user can apply multiple times for the same category."""
-    app1 = make_app(cl)
-    app2 = make_app(cl)
+    make_app(cl)
+    make_app(cl)
     assert LeaveApplication.objects.filter(user_id=1, category=cl).count() == 2
 
 @pytest.mark.django_db
@@ -53,9 +53,8 @@ def test_default_status_is_awaiting_unit_head(cl, make_app):
 @pytest.mark.django_db
 def test_end_before_start_rejected(cl, make_app):
     """Test that an application with end_date before start_date raises IntegrityError."""
-    with transaction.atomic():
-        with pytest.raises(IntegrityError):
-            make_app(cl, start_date=date(2026, 11, 2), end_date=date(2026, 11, 1))
+    with transaction.atomic(), pytest.raises(IntegrityError):
+        make_app(cl, start_date=date(2026, 11, 2), end_date=date(2026, 11, 1))
 
 @pytest.mark.django_db
 def test_half_day_on_single_day_allowed(cl, make_app):
@@ -66,9 +65,8 @@ def test_half_day_on_single_day_allowed(cl, make_app):
 @pytest.mark.django_db
 def test_half_day_on_multi_day_rejected(cl, make_app):
     """Test that half day is rejected on a multi-day range."""
-    with transaction.atomic():
-        with pytest.raises(IntegrityError):
-            make_app(cl, half_day="first", end_date=date(2026, 11, 3))
+    with transaction.atomic(), pytest.raises(IntegrityError):
+        make_app(cl, half_day="first", end_date=date(2026, 11, 3))
 
 @pytest.mark.django_db
 def test_no_half_day_multi_day_allowed(cl, make_app):
@@ -94,11 +92,10 @@ def test_balance_unique_per_category_user_year(cl, make_app):
     assert balance1.pk is not None
 
     # Second balance for same user/category/year (should fail)
-    with transaction.atomic():
-        with pytest.raises(IntegrityError):
-            LeaveBalance.objects.create(
-                category=cl, user_id=1, year=2026, balance_days=Decimal("5.00")
-            )
+    with transaction.atomic(), pytest.raises(IntegrityError):
+        LeaveBalance.objects.create(
+            category=cl, user_id=1, year=2026, balance_days=Decimal("5.00")
+        )
 
     # Balance for different year (should pass)
     balance2 = LeaveBalance.objects.create(
@@ -109,11 +106,10 @@ def test_balance_unique_per_category_user_year(cl, make_app):
 @pytest.mark.django_db
 def test_balance_cannot_be_negative(cl):
     """Test that balance_days cannot be negative."""
-    with transaction.atomic():
-        with pytest.raises(IntegrityError):
-            LeaveBalance.objects.create(
-                category=cl, user_id=1, year=2026, balance_days=Decimal("-0.5")
-            )
+    with transaction.atomic(), pytest.raises(IntegrityError):
+        LeaveBalance.objects.create(
+            category=cl, user_id=1, year=2026, balance_days=Decimal("-0.5")
+        )
 
 @pytest.mark.django_db
 def test_balance_keeps_fractions(cl):

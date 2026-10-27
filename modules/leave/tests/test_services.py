@@ -1,10 +1,9 @@
+"""Tests for leave application and transition services."""
 from datetime import date
 from decimal import Decimal
 
 import pytest
 
-pytestmark = pytest.mark.django_db
-# Assuming these modules exist and contain the necessary logic
 from core.api.exceptions import ConflictError, PermissionDeniedError
 from modules.leave.domain.state_machine import (
     APPLICANT_ACTION_REQUIRED,
@@ -24,6 +23,8 @@ from modules.leave.models import (
     LeaveCategory,
 )
 from modules.leave.services import applications as leave_services
+
+pytestmark = pytest.mark.django_db
 
 
 # --- Helper Principal ---
@@ -66,7 +67,7 @@ def el_balance(el_cat):
 @pytest.fixture
 def application_instance(cl_cat, cl_balance):
     # Create a base application instance for testing transitions
-    app = LeaveApplication.objects.create(
+    return LeaveApplication.objects.create(
         user_id=1,
         category=cl_cat,
         start_date=date(2026, 11, 2),
@@ -83,12 +84,11 @@ def application_instance(cl_cat, cl_balance):
         resumption_status="none",
         status=AWAITING_UNIT_HEAD,
     )
-    return app
 
 @pytest.fixture
 def director_app(cl_cat, cl_balance):
     # Application where applicant is a director
-    app = LeaveApplication.objects.create(
+    return LeaveApplication.objects.create(
         user_id=1,
         category=cl_cat,
         start_date=date(2026, 11, 2),
@@ -105,7 +105,6 @@ def director_app(cl_cat, cl_balance):
         resumption_status="none",
         status=AWAITING_DIRECTOR_SELF_SANCTION,
     )
-    return app
 
 # --- Tests for actor_kind ---
 
@@ -215,7 +214,7 @@ def test_apply_end_before_start_raises(cl_cat, user_principal):
 @pytest.mark.django_db
 def test_apply_overlap_raises(cl_cat, user_principal):
     # Setup existing application
-    existing_app = LeaveApplication.objects.create(
+    LeaveApplication.objects.create(
         user_id=user_principal.user_id,
         category=cl_cat,
         start_date=date(2026, 11, 1),

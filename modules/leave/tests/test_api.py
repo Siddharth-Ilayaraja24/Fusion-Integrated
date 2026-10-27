@@ -37,7 +37,7 @@ def _client(stub_iam, **kw):
 
 
 def test_categories_endpoint(stub_iam):
-    category = LeaveCategory.objects.create(code="CL", name="Casual Leave")
+    LeaveCategory.objects.create(code="CL", name="Casual Leave")
     c = _client(stub_iam)
     response = c.get("/api/v1/leave/categories")
     assert response.status_code == 200
