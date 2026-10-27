@@ -170,5 +170,28 @@ LOW
   - Added `modules/leave/tests/test_registry.py` (5 tests) verifying metadata, descriptions, complete role coverage, undeclared permission protection, and system permission isolation.
 - Evidence: `pytest modules/leave/tests/test_registry.py` 5 passed; `pytest modules/leave` = 105 passed; `ops/checks/nav_matches_routes.py` clean.
 
+## STEP 5.6 - API endpoints, serializers, and permission enforcement (issues C5, gap rows 22, 23, 25)
+- Reference: `modules/placement/api/`, `docs/02-iam/permission-catalog.generated.md`.
+- Changes:
+  - Config: mounted `path("api/v1/leave/", include("modules.leave.api.urls"))` in `config/urls.py`.
+  - Serializers: `modules/leave/api/serializers.py` (Category, Balance, Transition, Application, Apply, TransitionInput).
+  - Views: `modules/leave/api/views.py` (CategoryListView, BalanceListView, ApplicationListView, ApplicationCreateView, ApplicationDetailView, ApplicationTransitionView, ApplicationHistoryView).
+  - URLs: `modules/leave/api/urls.py` exposing REST endpoints.
+  - Enforced all declared permissions across API views (`HasPermission(P_VIEW, P_VIEW_SELF, P_CREATE, P_REVIEW, P_RESPOND, P_DELETE, P_BALANCE_VIEW, P_BALANCE_MANAGE)`).
+  - Regenerated permission manifest via `make permissions` (`registry/permissions.json` and `docs/02-iam/permission-catalog.generated.md`).
+- Prompts / Gemma attempts:
+  - 17_api_serializers.md - attempt 1: success.
+  - 18_api_views_urls.md - attempt 1: success.
+  - 19_api_tests.md - attempt 1: generated test suite, but used `results` dictionary wrapper on raw list responses and wrong `LeaveBalance` kwargs (`balance=8.0`).
+  - 20_api_tests_fix.md - attempt 2: fixed dictionary unwrapping and model kwargs, all 8 tests passed.
+- Evidence:
+  - `pytest modules/leave/tests/test_api.py` 8 passed.
+  - `pytest modules/leave` = 113 passed.
+  - `python manage.py permission_manifest --check` clean!
+  - `pytest modules/accesscontrol/tests/test_permission_manifest.py` 9 passed! (Resolved the known base repo test failure).
+  - Full repository test suite: 493 passed, 0 failed in 3.05s.
+- Commit: `52d19de`.
+
+
 
 
