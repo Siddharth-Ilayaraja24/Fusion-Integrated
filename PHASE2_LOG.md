@@ -160,4 +160,15 @@ LOW
   - Evidence: `pytest modules/leave/tests/test_services.py` 19 passed.
 - Overall Step 5.4 Evidence: `pytest modules/leave` = 100 passed (43 rules, 13 models, 18 state machine, 7 selectors, 19 services); `manage.py check` clean; `lint-imports` 4 kept.
 
+## STEP 5.5 - permissions and role grants (issues C5, M5, gap row 22)
+- Reference: `docs/08-delivery/role-assignment-guide.md`, `modules/placement/registry.py`.
+- Prompts: `phase2_prompts/16_registry.md` (attempt 1: success).
+- Changes:
+  - Added missing `leave_management.application.respond` permission required by the state machine for substitute responses.
+  - Replaced placeholder roles (employee, manager, admin) with real IAM designations (`Junior Assistant`, `faculty`, `HOD (CSE)`, `Dean Academic`, `Registrar`, `Director`, `acadadmin`).
+  - Set `NAV_ITEMS = []` (until client routes are added) so `ops/checks/nav_matches_routes.py` passes cleanly.
+  - Added `modules/leave/tests/test_registry.py` (5 tests) verifying metadata, descriptions, complete role coverage, undeclared permission protection, and system permission isolation.
+- Evidence: `pytest modules/leave/tests/test_registry.py` 5 passed; `pytest modules/leave` = 105 passed; `ops/checks/nav_matches_routes.py` clean.
+
+
 
