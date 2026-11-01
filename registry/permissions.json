@@ -1,5 +1,96 @@
 {
   "modules": {
+    "department": {
+      "grants": {
+        "HOD (CSE)": [
+          "department.department.view"
+        ],
+        "HOD (Design)": [
+          "department.department.view"
+        ],
+        "HOD (ECE)": [
+          "department.department.view"
+        ],
+        "HOD (Liberal Arts)": [
+          "department.department.view"
+        ],
+        "HOD (ME)": [
+          "department.department.view"
+        ],
+        "HOD (NS)": [
+          "department.department.view"
+        ],
+        "acadadmin": [
+          "department.department.view"
+        ],
+        "dept_admin": [
+          "department.department.view"
+        ],
+        "deptadmin_cse": [
+          "department.department.view"
+        ],
+        "deptadmin_design": [
+          "department.department.view"
+        ],
+        "deptadmin_ece": [
+          "department.department.view"
+        ],
+        "deptadmin_liberalarts": [
+          "department.department.view"
+        ],
+        "deptadmin_me": [
+          "department.department.view"
+        ],
+        "deptadmin_ns": [
+          "department.department.view"
+        ],
+        "deptadmin_sm": [
+          "department.department.view"
+        ],
+        "faculty": [
+          "department.department.view"
+        ],
+        "student": [
+          "department.department.view"
+        ]
+      },
+      "module_grants": [
+        "HOD (CSE)",
+        "HOD (Design)",
+        "HOD (ECE)",
+        "HOD (Liberal Arts)",
+        "HOD (ME)",
+        "HOD (NS)",
+        "acadadmin",
+        "dept_admin",
+        "deptadmin_cse",
+        "deptadmin_design",
+        "deptadmin_ece",
+        "deptadmin_liberalarts",
+        "deptadmin_me",
+        "deptadmin_ns",
+        "deptadmin_sm",
+        "faculty",
+        "student"
+      ],
+      "nav": {
+        "base_path": "/department",
+        "icon": "Buildings",
+        "items": [],
+        "label": "Department",
+        "nav_section": "Department",
+        "sort_order": 40,
+        "status": "active"
+      },
+      "permissions": [
+        {
+          "code": "department.department.view",
+          "label": "View department listings"
+        }
+      ],
+      "scope_permissions": [],
+      "system_permissions": []
+    },
     "directory": {
       "grants": {
         "Dean Academic": [
