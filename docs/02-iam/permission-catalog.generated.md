@@ -25,6 +25,10 @@ For the intended taxonomy of modules not yet built, see
 | `department.stock_request.approve` | Approve stock requests | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)` |
 | `department.stock_request.update` | Update stock requests | `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
 | `department.stock_movement.view` | View stock movements | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.feedback.view` | View department feedback | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm`, `faculty`, `student` |
+| `department.feedback.create` | Create department feedback | `faculty`, `student` |
+| `department.feedback.review` | Review department feedback | `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.feedback.update` | Update department feedback | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)` |
 
 ## `directory`
 

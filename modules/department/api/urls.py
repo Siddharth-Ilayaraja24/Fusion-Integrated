@@ -1,6 +1,7 @@
 from django.urls import path
 
 from modules.department.api import announcements_views as an
+from modules.department.api import feedback_views as fb
 from modules.department.api import inventory_stock_views as st
 from modules.department.api import role_assignments_views as ra
 from modules.department.api import views as v
@@ -17,4 +18,7 @@ urlpatterns = [
     path("stock-requests/<int:pk>/issue", st.StockRequestIssueView.as_view(), name="department-stock-requests-issue"),
     path("stock-history", st.StockHistoryView.as_view(), name="department-stock-history"),
     path("stock-movements", st.StockMovementListView.as_view(), name="department-stock-movements"),
+    path("feedback", fb.FeedbackListView.as_view(), name="department-feedback"),
+    path("feedback/<int:pk>/review", fb.FeedbackReviewView.as_view(), name="department-feedback-review"),
+    path("feedback/<int:pk>/dispose", fb.FeedbackDisposeView.as_view(), name="department-feedback-dispose"),
 ]

@@ -8,6 +8,8 @@
           "department.announcement.update",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.update",
+          "department.feedback.view",
           "department.inventory.view",
           "department.stock_movement.view",
           "department.stock_request.approve",
@@ -19,6 +21,8 @@
           "department.announcement.update",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.update",
+          "department.feedback.view",
           "department.inventory.view",
           "department.stock_movement.view",
           "department.stock_request.approve",
@@ -30,6 +34,8 @@
           "department.announcement.update",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.update",
+          "department.feedback.view",
           "department.inventory.view",
           "department.stock_movement.view",
           "department.stock_request.approve",
@@ -41,6 +47,8 @@
           "department.announcement.update",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.update",
+          "department.feedback.view",
           "department.inventory.view",
           "department.stock_movement.view",
           "department.stock_request.approve",
@@ -52,6 +60,8 @@
           "department.announcement.update",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.update",
+          "department.feedback.view",
           "department.inventory.view",
           "department.stock_movement.view",
           "department.stock_request.approve",
@@ -63,6 +73,8 @@
           "department.announcement.update",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.update",
+          "department.feedback.view",
           "department.inventory.view",
           "department.stock_movement.view",
           "department.stock_request.approve",
@@ -77,6 +89,8 @@
           "department.announcement.create",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.review",
+          "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
           "department.stock_movement.view",
@@ -87,6 +101,8 @@
           "department.announcement.create",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.review",
+          "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
           "department.stock_movement.view",
@@ -97,6 +113,8 @@
           "department.announcement.create",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.review",
+          "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
           "department.stock_movement.view",
@@ -107,6 +125,8 @@
           "department.announcement.create",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.review",
+          "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
           "department.stock_movement.view",
@@ -117,6 +137,8 @@
           "department.announcement.create",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.review",
+          "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
           "department.stock_movement.view",
@@ -127,6 +149,8 @@
           "department.announcement.create",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.review",
+          "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
           "department.stock_movement.view",
@@ -137,6 +161,8 @@
           "department.announcement.create",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.review",
+          "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
           "department.stock_movement.view",
@@ -147,6 +173,8 @@
           "department.announcement.create",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.review",
+          "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
           "department.stock_movement.view",
@@ -157,11 +185,15 @@
           "department.announcement.create",
           "department.announcement.view",
           "department.department.view",
+          "department.feedback.create",
+          "department.feedback.view",
           "department.stock_request.create"
         ],
         "student": [
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.feedback.create",
+          "department.feedback.view"
         ]
       },
       "module_grants": [
@@ -248,6 +280,22 @@
         {
           "code": "department.stock_movement.view",
           "label": "View stock movements"
+        },
+        {
+          "code": "department.feedback.view",
+          "label": "View department feedback"
+        },
+        {
+          "code": "department.feedback.create",
+          "label": "Create department feedback"
+        },
+        {
+          "code": "department.feedback.review",
+          "label": "Review department feedback"
+        },
+        {
+          "code": "department.feedback.update",
+          "label": "Update department feedback"
         }
       ],
       "scope_permissions": [],

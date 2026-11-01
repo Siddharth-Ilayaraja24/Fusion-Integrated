@@ -355,6 +355,158 @@ paths:
           description: ''
         '403':
           description: No response body
+  /api/v1/department/feedback:
+    get:
+      operationId: v1_department_feedback_list
+      description: Lists and creates department feedback submissions.
+      summary: List and create department feedback submissions
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Feedback
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeptFeedbackList'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeptFeedbackList'
+          description: ''
+        '400':
+          description: No response body
+        '403':
+          description: No response body
+    post:
+      operationId: v1_department_feedback_create
+      description: Lists and creates department feedback submissions.
+      summary: List and create department feedback submissions
+      tags:
+      - Feedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptFeedbackWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeptFeedbackWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeptFeedbackWrite'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptFeedback'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptFeedback'
+          description: ''
+        '400':
+          description: No response body
+        '403':
+          description: No response body
+  /api/v1/department/feedback/{id}/dispose:
+    post:
+      operationId: v1_department_feedback_dispose_create
+      description: Disposes of the feedback submission.
+      summary: Dispose of a department feedback submission
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Feedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptFeedback'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeptFeedback'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeptFeedback'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptFeedback'
+          description: ''
+        '404':
+          description: No response body
+        '403':
+          description: No response body
+  /api/v1/department/feedback/{id}/review:
+    post:
+      operationId: v1_department_feedback_review_create
+      description: Reviews the feedback submission.
+      summary: Review a department feedback submission
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Feedback
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptFeedback'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeptFeedback'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeptFeedback'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptFeedback'
+          description: ''
+        '404':
+          description: No response body
+        '403':
+          description: No response body
   /api/v1/department/inventory:
     get:
       operationId: v1_department_inventory_list
@@ -2592,6 +2744,9 @@ components:
         * `registered` - Registered students
         * `alumni` - Alumni
         * `all` - Everyone
+    BlankEnum:
+      enum:
+      - ''
     BulkOutcome:
       type: object
       properties:
@@ -2681,6 +2836,20 @@ components:
       - resume_link
       - roll_no
       - user_id
+    CategoryEnum:
+      enum:
+      - academic
+      - infrastructure
+      - administrative
+      - facilities
+      - other
+      type: string
+      description: |-
+        * `academic` - Academic
+        * `infrastructure` - Infrastructure
+        * `administrative` - Administrative
+        * `facilities` - Facilities
+        * `other` - Other
     Clearance:
       type: object
       description: Rule 24. `blocking` names each company, so a refusal is actionable.
@@ -3032,6 +3201,70 @@ components:
       - body
       - target_roles
       - title
+    DeptFeedback:
+      type: object
+      description: Serializes a Feedback model instance.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department:
+          type: integer
+        submitter_user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        body:
+          type: string
+        category:
+          nullable: true
+          oneOf:
+          - $ref: '#/components/schemas/CategoryEnum'
+          - $ref: '#/components/schemas/BlankEnum'
+          - $ref: '#/components/schemas/NullEnum'
+        state:
+          $ref: '#/components/schemas/DeptFeedbackStateEnum'
+        reviewed_at:
+          type: string
+          format: date-time
+          nullable: true
+        disposed_at:
+          type: string
+          format: date-time
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - body
+      - created_at
+      - department
+      - id
+      - submitter_user_id
+    DeptFeedbackStateEnum:
+      enum:
+      - new
+      - under_review
+      - resolved
+      - closed
+      type: string
+      description: |-
+        * `new` - New
+        * `under_review` - Under Review
+        * `resolved` - Resolved
+        * `closed` - Closed
+    DeptFeedbackWrite:
+      type: object
+      description: Serializes data for creating a Feedback submission.
+      properties:
+        department:
+          type: integer
+        body:
+          type: string
+      required:
+      - body
+      - department
     DeptInventoryItem:
       type: object
       description: Serializes an InventoryItem model instance.
@@ -3152,7 +3385,7 @@ components:
           maximum: 2147483647
           minimum: -2147483648
         state:
-          $ref: '#/components/schemas/StateEnum'
+          $ref: '#/components/schemas/DeptStockRequestStateEnum'
         decided_by_user_id:
           type: integer
           maximum: 2147483647
@@ -3176,6 +3409,18 @@ components:
       - id
       - item
       - quantity
+    DeptStockRequestStateEnum:
+      enum:
+      - pending_hod_approval
+      - approved_for_issuance
+      - rejected
+      - issued
+      type: string
+      description: |-
+        * `pending_hod_approval` - Pending HOD Approval
+        * `approved_for_issuance` - Approved for Issuance
+        * `rejected` - Rejected
+        * `issued` - Issued
     DeptStockRequestWrite:
       type: object
       description: Serializes data for creating a StockRequest.
@@ -3605,6 +3850,9 @@ components:
       - is_late
       - message
       - record
+    NullEnum:
+      enum:
+      - null
     OffCampusRecord:
       type: object
       properties:
@@ -3854,6 +4102,25 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DeptAnnouncement'
+    PaginatedDeptFeedbackList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeptFeedback'
     PaginatedDeptInventoryItemList:
       type: object
       required:
@@ -4785,18 +5052,6 @@ components:
       required:
       - available
       - season
-    StateEnum:
-      enum:
-      - pending_hod_approval
-      - approved_for_issuance
-      - rejected
-      - issued
-      type: string
-      description: |-
-        * `pending_hod_approval` - Pending HOD Approval
-        * `approved_for_issuance` - Approved for Issuance
-        * `rejected` - Rejected
-        * `issued` - Issued
     SubmitOfferLetter:
       type: object
       properties:
