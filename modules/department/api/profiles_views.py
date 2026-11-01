@@ -263,5 +263,4 @@ class OfficialChangeDecideView(APIView):
             proposal_id=pk,
             outcome=data["outcome"],
         )
-        stored_proposal = details_service.store_proposal(outcome)
-        return Response(DeptOfficialChangeSerializer(stored_proposal).data)
+        return Response(DeptOfficialChangeSerializer(outcome).data)

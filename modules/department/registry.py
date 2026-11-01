@@ -5,7 +5,20 @@ MODULE = {
     "status": "active",
 }
 
-NAV_ITEMS = []
+NAV_ITEMS = [
+    {"code": "department.announcements", "label": "Announcements",
+     "icon": "Megaphone", "to": "/department/announcements",
+     "required_permission": "department.announcement.view", "sort_order": 10},
+    {"code": "department.stock_requests", "label": "Stock Requests",
+     "icon": "Package", "to": "/department/stock-requests",
+     "required_permission": "department.stock_request.view", "sort_order": 20},
+    {"code": "department.feedback", "label": "Feedback",
+     "icon": "ChatText", "to": "/department/feedback",
+     "required_permission": "department.feedback.view", "sort_order": 30},
+    {"code": "department.timetable", "label": "Timetable",
+     "icon": "CalendarBlank", "to": "/department/timetable",
+     "required_permission": "department.timetable.view", "sort_order": 40},
+]
 
 PERMISSIONS = [
     ("department.department.view", "View department listings"),
