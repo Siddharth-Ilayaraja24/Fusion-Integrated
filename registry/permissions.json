@@ -3,21 +3,45 @@
     "department": {
       "grants": {
         "HOD (CSE)": [
+          "department.announcement.create",
+          "department.announcement.delete",
+          "department.announcement.update",
+          "department.announcement.view",
           "department.department.view"
         ],
         "HOD (Design)": [
+          "department.announcement.create",
+          "department.announcement.delete",
+          "department.announcement.update",
+          "department.announcement.view",
           "department.department.view"
         ],
         "HOD (ECE)": [
+          "department.announcement.create",
+          "department.announcement.delete",
+          "department.announcement.update",
+          "department.announcement.view",
           "department.department.view"
         ],
         "HOD (Liberal Arts)": [
+          "department.announcement.create",
+          "department.announcement.delete",
+          "department.announcement.update",
+          "department.announcement.view",
           "department.department.view"
         ],
         "HOD (ME)": [
+          "department.announcement.create",
+          "department.announcement.delete",
+          "department.announcement.update",
+          "department.announcement.view",
           "department.department.view"
         ],
         "HOD (NS)": [
+          "department.announcement.create",
+          "department.announcement.delete",
+          "department.announcement.update",
+          "department.announcement.view",
           "department.department.view"
         ],
         "acadadmin": [
@@ -26,33 +50,52 @@
           "department.role_assignment.view"
         ],
         "dept_admin": [
+          "department.announcement.create",
+          "department.announcement.view",
           "department.department.view"
         ],
         "deptadmin_cse": [
+          "department.announcement.create",
+          "department.announcement.view",
           "department.department.view"
         ],
         "deptadmin_design": [
+          "department.announcement.create",
+          "department.announcement.view",
           "department.department.view"
         ],
         "deptadmin_ece": [
+          "department.announcement.create",
+          "department.announcement.view",
           "department.department.view"
         ],
         "deptadmin_liberalarts": [
+          "department.announcement.create",
+          "department.announcement.view",
           "department.department.view"
         ],
         "deptadmin_me": [
+          "department.announcement.create",
+          "department.announcement.view",
           "department.department.view"
         ],
         "deptadmin_ns": [
+          "department.announcement.create",
+          "department.announcement.view",
           "department.department.view"
         ],
         "deptadmin_sm": [
+          "department.announcement.create",
+          "department.announcement.view",
           "department.department.view"
         ],
         "faculty": [
+          "department.announcement.create",
+          "department.announcement.view",
           "department.department.view"
         ],
         "student": [
+          "department.announcement.view",
           "department.department.view"
         ]
       },
@@ -96,6 +139,22 @@
         {
           "code": "department.role_assignment.assign",
           "label": "Assign department roles"
+        },
+        {
+          "code": "department.announcement.view",
+          "label": "View department announcements"
+        },
+        {
+          "code": "department.announcement.create",
+          "label": "Create department announcements"
+        },
+        {
+          "code": "department.announcement.update",
+          "label": "Update department announcements"
+        },
+        {
+          "code": "department.announcement.delete",
+          "label": "Delete department announcements"
         }
       ],
       "scope_permissions": [],

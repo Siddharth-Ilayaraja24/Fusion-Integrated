@@ -46,6 +46,207 @@ paths:
               schema:
                 $ref: '#/components/schemas/Ok'
           description: ''
+  /api/v1/department/announcements:
+    get:
+      operationId: v1_department_announcements_list
+      description: Lists and creates department announcements.
+      summary: List and create department announcements
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Announcements
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeptAnnouncementList'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeptAnnouncementList'
+          description: ''
+        '400':
+          description: No response body
+        '403':
+          description: No response body
+    post:
+      operationId: v1_department_announcements_create
+      description: Lists and creates department announcements.
+      summary: List and create department announcements
+      tags:
+      - Announcements
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptAnnouncementWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeptAnnouncementWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeptAnnouncementWrite'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptAnnouncement'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptAnnouncement'
+          description: ''
+        '400':
+          description: No response body
+        '403':
+          description: No response body
+  /api/v1/department/announcements/{id}:
+    get:
+      operationId: v1_department_announcements_retrieve
+      description: Retrieves the announcement.
+      summary: Retrieve a specific department announcement
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Announcements
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptAnnouncement'
+          description: ''
+        '404':
+          description: No response body
+        '403':
+          description: No response body
+    patch:
+      operationId: v1_department_announcements_partial_update
+      description: Updates an existing announcement.
+      summary: Retrieve a specific department announcement
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Announcements
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDeptAnnouncement'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDeptAnnouncement'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDeptAnnouncement'
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptAnnouncement'
+          description: ''
+        '404':
+          description: No response body
+        '403':
+          description: No response body
+    delete:
+      operationId: v1_department_announcements_destroy
+      description: Deletes an announcement.
+      summary: Retrieve a specific department announcement
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Announcements
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptAnnouncement'
+          description: ''
+        '404':
+          description: No response body
+        '403':
+          description: No response body
+  /api/v1/department/announcements/{id}/hide:
+    post:
+      operationId: v1_department_announcements_hide_create
+      description: Hides the announcement.
+      summary: Hide a department announcement
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Announcements
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptAnnouncement'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeptAnnouncement'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeptAnnouncement'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptAnnouncement'
+          description: ''
+        '404':
+          description: No response body
+        '403':
+          description: No response body
   /api/v1/department/assignments:
     get:
       operationId: v1_department_assignments_list
@@ -2466,6 +2667,81 @@ components:
       - headship
       - id
       - name
+    DeptAnnouncement:
+      type: object
+      description: Serializes an Announcement model instance.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department:
+          type: integer
+        title:
+          type: string
+          maxLength: 255
+        body:
+          type: string
+        target_roles: {}
+        target_programme:
+          type: string
+          nullable: true
+          maxLength: 100
+        target_batch_year:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        status:
+          $ref: '#/components/schemas/DeptAnnouncementStatusEnum'
+        published_by_user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - body
+      - created_at
+      - department
+      - id
+      - published_by_user_id
+      - title
+    DeptAnnouncementStatusEnum:
+      enum:
+      - active
+      - hidden
+      - deleted
+      type: string
+      description: |-
+        * `active` - Active
+        * `hidden` - Hidden
+        * `deleted` - Deleted
+    DeptAnnouncementWrite:
+      type: object
+      description: Serializes data for creating or updating an Announcement.
+      properties:
+        department:
+          type: integer
+        title:
+          type: string
+          maxLength: 255
+        body:
+          type: string
+        target_roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/TargetRolesEnum'
+        target_programme:
+          type: string
+        target_batch_year:
+          type: integer
+          nullable: true
+      required:
+      - body
+      - target_roles
+      - title
     Detail:
       type: object
       properties:
@@ -3113,6 +3389,25 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Department'
+    PaginatedDeptAnnouncementList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeptAnnouncement'
     PaginatedInterviewRoundList:
       type: object
       required:
@@ -3189,6 +3484,40 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RoleAssignment'
+    PatchedDeptAnnouncement:
+      type: object
+      description: Serializes an Announcement model instance.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department:
+          type: integer
+        title:
+          type: string
+          maxLength: 255
+        body:
+          type: string
+        target_roles: {}
+        target_programme:
+          type: string
+          nullable: true
+          maxLength: 100
+        target_batch_year:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        status:
+          $ref: '#/components/schemas/DeptAnnouncementStatusEnum'
+        published_by_user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
     PatchedJobPosting:
       type: object
       properties:
@@ -3960,6 +4289,14 @@ components:
           type: integer
       required:
       - document_id
+    TargetRolesEnum:
+      enum:
+      - student
+      - faculty
+      type: string
+      description: |-
+        * `student` - Student
+        * `faculty` - Faculty
     TopicEnum:
       enum:
       - drive
