@@ -19,9 +19,8 @@ from modules.department.services.role_assignments import record_assignment
     responses={
         200: RoleAssignmentSerializer,
         201: RoleAssignmentSerializer,
-        400: None,  # For validation errors
+        400: None,  # For validation errors or bad request (e.g., invalid department ID)
         403: None,  # For permission errors
-        400: None,  # For bad request (e.g., invalid department ID)
     },
 )
 class RoleAssignmentListView(ListCreateAPIView):

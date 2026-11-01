@@ -1,7 +1,7 @@
 import django.db.transaction
 
 from core.api.exceptions import ConflictError, NotFoundError
-from modules.department.models import CourseRoster, Department
+from modules.department.models import CourseRoster, Department, DepartmentProfile
 from modules.department.selectors.scoping import department_ids_for_role
 from modules.department.services.authz import require
 
@@ -27,7 +27,6 @@ def create_profile(*, actor, department_id, data: dict):
         except NotFoundError as e:
             raise e
 
-        from modules.department.models import DepartmentProfile
         profile = DepartmentProfile.objects.create(
             department=department,
             **data
@@ -59,7 +58,6 @@ def deactivate_profile(*, actor, profile_id: int):
     with django.db.transaction.atomic():
         try:
             # 1. Find the profile and lock the department context
-            from modules.department.models import DepartmentProfile
             profile = DepartmentProfile.objects.select_for_update().get(pk=profile_id)
             department = _held(actor, profile.department_id)
         except DepartmentProfile.DoesNotExist:
