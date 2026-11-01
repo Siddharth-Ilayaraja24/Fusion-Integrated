@@ -355,6 +355,296 @@ paths:
           description: ''
         '403':
           description: No response body
+  /api/v1/department/inventory:
+    get:
+      operationId: v1_department_inventory_list
+      description: Lists and creates department inventory stock items.
+      summary: List and create department inventory stock items
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Inventory Stock
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeptInventoryItemList'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeptInventoryItemList'
+          description: ''
+        '400':
+          description: No response body
+        '403':
+          description: No response body
+    post:
+      operationId: v1_department_inventory_create
+      description: Lists and creates department inventory stock items.
+      summary: List and create department inventory stock items
+      tags:
+      - Inventory Stock
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptInventoryWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeptInventoryWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeptInventoryWrite'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptInventoryItem'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptInventoryItem'
+          description: ''
+        '400':
+          description: No response body
+        '403':
+          description: No response body
+  /api/v1/department/stock-history:
+    get:
+      operationId: v1_department_stock_history_list
+      description: Views the issued stock history of the principal.
+      summary: View issued stock history for the principal
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Stock Request
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeptStockRequestList'
+          description: ''
+        '403':
+          description: No response body
+  /api/v1/department/stock-movements:
+    get:
+      operationId: v1_department_stock_movements_list
+      description: Views visible stock movements for the principal.
+      summary: View visible stock movements for the principal
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Stock Movement
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeptStockMovementList'
+          description: ''
+        '403':
+          description: No response body
+  /api/v1/department/stock-requests:
+    get:
+      operationId: v1_department_stock_requests_list
+      description: Lists and creates stock requests.
+      summary: List and create stock requests
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - Stock Request
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeptStockRequestList'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeptStockRequestList'
+          description: ''
+        '400':
+          description: No response body
+        '403':
+          description: No response body
+    post:
+      operationId: v1_department_stock_requests_create
+      description: Lists and creates stock requests.
+      summary: List and create stock requests
+      tags:
+      - Stock Request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptStockRequestWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeptStockRequestWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeptStockRequestWrite'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptStockRequest'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptStockRequest'
+          description: ''
+        '400':
+          description: No response body
+        '403':
+          description: No response body
+  /api/v1/department/stock-requests/{id}/decide:
+    post:
+      operationId: v1_department_stock_requests_decide_create
+      description: Decides on the stock request.
+      summary: Decide on a stock request
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Stock Request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptStockDecision'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeptStockDecision'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeptStockDecision'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptStockRequest'
+          description: ''
+        '404':
+          description: No response body
+        '403':
+          description: No response body
+  /api/v1/department/stock-requests/{id}/issue:
+    post:
+      operationId: v1_department_stock_requests_issue_create
+      description: Issues stock for the request.
+      summary: Issue stock against a request
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Stock Request
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptStockRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeptStockRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeptStockRequest'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptStockRequest'
+          description: ''
+        '404':
+          description: No response body
+        '403':
+          description: No response body
   /api/v1/directory/users:
     get:
       operationId: v1_directory_users_retrieve
@@ -2742,6 +3032,162 @@ components:
       - body
       - target_roles
       - title
+    DeptInventoryItem:
+      type: object
+      description: Serializes an InventoryItem model instance.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department:
+          type: integer
+        name:
+          type: string
+          maxLength: 100
+        unit:
+          type: string
+          maxLength: 20
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - department
+      - id
+      - name
+      - unit
+    DeptInventoryWrite:
+      type: object
+      description: Serializes data for creating or updating an InventoryItem.
+      properties:
+        department:
+          type: integer
+        name:
+          type: string
+        unit:
+          type: string
+        quantity:
+          type: integer
+          minimum: 1
+      required:
+      - department
+      - name
+      - quantity
+      - unit
+    DeptStockDecision:
+      type: object
+      description: Serializes data for making a stock decision.
+      properties:
+        outcome:
+          $ref: '#/components/schemas/DeptStockDecisionOutcomeEnum'
+      required:
+      - outcome
+    DeptStockDecisionOutcomeEnum:
+      enum:
+      - approved
+      - rejected
+      type: string
+      description: |-
+        * `approved` - Approved
+        * `rejected` - Rejected
+    DeptStockMovement:
+      type: object
+      description: Serializes a StockMovement model instance.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        item:
+          type: integer
+        kind:
+          $ref: '#/components/schemas/DeptStockMovementKindEnum'
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        request:
+          type: integer
+          nullable: true
+        actor_user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - id
+      - item
+      - kind
+      - quantity
+    DeptStockMovementKindEnum:
+      enum:
+      - insertion
+      - issuance
+      type: string
+      description: |-
+        * `insertion` - Insertion
+        * `issuance` - Issuance
+    DeptStockRequest:
+      type: object
+      description: Serializes a StockRequest model instance.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department:
+          type: integer
+        item:
+          type: integer
+        requester_user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        state:
+          $ref: '#/components/schemas/StateEnum'
+        decided_by_user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        decided_at:
+          type: string
+          format: date-time
+          nullable: true
+        issued_by_user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        issued_at:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - department
+      - id
+      - item
+      - quantity
+    DeptStockRequestWrite:
+      type: object
+      description: Serializes data for creating a StockRequest.
+      properties:
+        item:
+          type: integer
+        quantity:
+          type: integer
+          minimum: 1
+      required:
+      - item
+      - quantity
     Detail:
       type: object
       properties:
@@ -3408,6 +3854,63 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DeptAnnouncement'
+    PaginatedDeptInventoryItemList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeptInventoryItem'
+    PaginatedDeptStockMovementList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeptStockMovement'
+    PaginatedDeptStockRequestList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeptStockRequest'
     PaginatedInterviewRoundList:
       type: object
       required:
@@ -4282,6 +4785,18 @@ components:
       required:
       - available
       - season
+    StateEnum:
+      enum:
+      - pending_hod_approval
+      - approved_for_issuance
+      - rejected
+      - issued
+      type: string
+      description: |-
+        * `pending_hod_approval` - Pending HOD Approval
+        * `approved_for_issuance` - Approved for Issuance
+        * `rejected` - Rejected
+        * `issued` - Issued
     SubmitOfferLetter:
       type: object
       properties:

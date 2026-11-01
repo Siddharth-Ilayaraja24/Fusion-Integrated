@@ -7,42 +7,66 @@
           "department.announcement.delete",
           "department.announcement.update",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.approve",
+          "department.stock_request.view"
         ],
         "HOD (Design)": [
           "department.announcement.create",
           "department.announcement.delete",
           "department.announcement.update",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.approve",
+          "department.stock_request.view"
         ],
         "HOD (ECE)": [
           "department.announcement.create",
           "department.announcement.delete",
           "department.announcement.update",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.approve",
+          "department.stock_request.view"
         ],
         "HOD (Liberal Arts)": [
           "department.announcement.create",
           "department.announcement.delete",
           "department.announcement.update",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.approve",
+          "department.stock_request.view"
         ],
         "HOD (ME)": [
           "department.announcement.create",
           "department.announcement.delete",
           "department.announcement.update",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.approve",
+          "department.stock_request.view"
         ],
         "HOD (NS)": [
           "department.announcement.create",
           "department.announcement.delete",
           "department.announcement.update",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.approve",
+          "department.stock_request.view"
         ],
         "acadadmin": [
           "department.department.view",
@@ -52,47 +76,88 @@
         "dept_admin": [
           "department.announcement.create",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.create",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.update",
+          "department.stock_request.view"
         ],
         "deptadmin_cse": [
           "department.announcement.create",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.create",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.update",
+          "department.stock_request.view"
         ],
         "deptadmin_design": [
           "department.announcement.create",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.create",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.update",
+          "department.stock_request.view"
         ],
         "deptadmin_ece": [
           "department.announcement.create",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.create",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.update",
+          "department.stock_request.view"
         ],
         "deptadmin_liberalarts": [
           "department.announcement.create",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.create",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.update",
+          "department.stock_request.view"
         ],
         "deptadmin_me": [
           "department.announcement.create",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.create",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.update",
+          "department.stock_request.view"
         ],
         "deptadmin_ns": [
           "department.announcement.create",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.create",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.update",
+          "department.stock_request.view"
         ],
         "deptadmin_sm": [
           "department.announcement.create",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.inventory.create",
+          "department.inventory.view",
+          "department.stock_movement.view",
+          "department.stock_request.update",
+          "department.stock_request.view"
         ],
         "faculty": [
           "department.announcement.create",
           "department.announcement.view",
-          "department.department.view"
+          "department.department.view",
+          "department.stock_request.create"
         ],
         "student": [
           "department.announcement.view",
@@ -155,6 +220,34 @@
         {
           "code": "department.announcement.delete",
           "label": "Delete department announcements"
+        },
+        {
+          "code": "department.inventory.view",
+          "label": "View department inventory"
+        },
+        {
+          "code": "department.inventory.create",
+          "label": "Create department inventory"
+        },
+        {
+          "code": "department.stock_request.view",
+          "label": "View stock requests"
+        },
+        {
+          "code": "department.stock_request.create",
+          "label": "Create stock requests"
+        },
+        {
+          "code": "department.stock_request.approve",
+          "label": "Approve stock requests"
+        },
+        {
+          "code": "department.stock_request.update",
+          "label": "Update stock requests"
+        },
+        {
+          "code": "department.stock_movement.view",
+          "label": "View stock movements"
         }
       ],
       "scope_permissions": [],

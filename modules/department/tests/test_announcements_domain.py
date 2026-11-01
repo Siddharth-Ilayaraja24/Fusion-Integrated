@@ -1,5 +1,5 @@
-import pytest
 from modules.department.domain.announcements import is_complete, is_relevant
+
 
 def test_is_complete_blank_title():
     """Tests is_complete when title is blank."""
