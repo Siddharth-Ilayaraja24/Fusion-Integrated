@@ -192,6 +192,7 @@ class StockRequestIssueView(APIView):
 )
 class StockHistoryView(ListAPIView):
     """Views the issued stock history of the principal."""
+    serializer_class = DeptStockRequestSerializer
     queryset = StockRequest.objects.none()
     permission_classes = [
         HasModuleGrant("department"),
@@ -215,6 +216,7 @@ class StockHistoryView(ListAPIView):
 )
 class StockMovementListView(ListAPIView):
     """Views visible stock movements for the principal."""
+    serializer_class = DeptStockMovementSerializer
     queryset = StockMovement.objects.none()
     permission_classes = [
         HasModuleGrant("department"),
