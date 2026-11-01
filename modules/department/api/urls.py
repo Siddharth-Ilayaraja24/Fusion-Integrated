@@ -4,6 +4,7 @@ from modules.department.api import announcements_views as an
 from modules.department.api import feedback_views as fb
 from modules.department.api import inventory_stock_views as st
 from modules.department.api import role_assignments_views as ra
+from modules.department.api import timetable_views as tt
 from modules.department.api import views as v
 
 urlpatterns = [
@@ -21,4 +22,10 @@ urlpatterns = [
     path("feedback", fb.FeedbackListView.as_view(), name="department-feedback"),
     path("feedback/<int:pk>/review", fb.FeedbackReviewView.as_view(), name="department-feedback-review"),
     path("feedback/<int:pk>/dispose", fb.FeedbackDisposeView.as_view(), name="department-feedback-dispose"),
+    path("timetable", tt.TimetableListView.as_view(), name="department-timetable"),
+    path("timetable/<int:pk>", tt.TimetableDetailView.as_view(), name="department-timetable-detail"),
+    path("labs", tt.LabListView.as_view(), name="department-labs"),
+    path("labs/<int:pk>", tt.LabDetailView.as_view(), name="department-labs-detail"),
+    path("programs", tt.ProgramListView.as_view(), name="department-programs"),
+    path("programs/<int:pk>", tt.ProgramDetailView.as_view(), name="department-programs-detail"),
 ]

@@ -11,9 +11,12 @@
           "department.feedback.update",
           "department.feedback.view",
           "department.inventory.view",
+          "department.lab.view",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.approve",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.view"
         ],
         "HOD (Design)": [
           "department.announcement.create",
@@ -24,9 +27,12 @@
           "department.feedback.update",
           "department.feedback.view",
           "department.inventory.view",
+          "department.lab.view",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.approve",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.view"
         ],
         "HOD (ECE)": [
           "department.announcement.create",
@@ -37,9 +43,12 @@
           "department.feedback.update",
           "department.feedback.view",
           "department.inventory.view",
+          "department.lab.view",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.approve",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.view"
         ],
         "HOD (Liberal Arts)": [
           "department.announcement.create",
@@ -50,9 +59,12 @@
           "department.feedback.update",
           "department.feedback.view",
           "department.inventory.view",
+          "department.lab.view",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.approve",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.view"
         ],
         "HOD (ME)": [
           "department.announcement.create",
@@ -63,9 +75,12 @@
           "department.feedback.update",
           "department.feedback.view",
           "department.inventory.view",
+          "department.lab.view",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.approve",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.view"
         ],
         "HOD (NS)": [
           "department.announcement.create",
@@ -76,9 +91,12 @@
           "department.feedback.update",
           "department.feedback.view",
           "department.inventory.view",
+          "department.lab.view",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.approve",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.view"
         ],
         "acadadmin": [
           "department.department.view",
@@ -93,9 +111,16 @@
           "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
+          "department.lab.update",
+          "department.lab.view",
+          "department.program.update",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.update",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.create",
+          "department.timetable.update",
+          "department.timetable.view"
         ],
         "deptadmin_cse": [
           "department.announcement.create",
@@ -105,9 +130,16 @@
           "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
+          "department.lab.update",
+          "department.lab.view",
+          "department.program.update",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.update",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.create",
+          "department.timetable.update",
+          "department.timetable.view"
         ],
         "deptadmin_design": [
           "department.announcement.create",
@@ -117,9 +149,16 @@
           "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
+          "department.lab.update",
+          "department.lab.view",
+          "department.program.update",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.update",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.create",
+          "department.timetable.update",
+          "department.timetable.view"
         ],
         "deptadmin_ece": [
           "department.announcement.create",
@@ -129,9 +168,16 @@
           "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
+          "department.lab.update",
+          "department.lab.view",
+          "department.program.update",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.update",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.create",
+          "department.timetable.update",
+          "department.timetable.view"
         ],
         "deptadmin_liberalarts": [
           "department.announcement.create",
@@ -141,9 +187,16 @@
           "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
+          "department.lab.update",
+          "department.lab.view",
+          "department.program.update",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.update",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.create",
+          "department.timetable.update",
+          "department.timetable.view"
         ],
         "deptadmin_me": [
           "department.announcement.create",
@@ -153,9 +206,16 @@
           "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
+          "department.lab.update",
+          "department.lab.view",
+          "department.program.update",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.update",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.create",
+          "department.timetable.update",
+          "department.timetable.view"
         ],
         "deptadmin_ns": [
           "department.announcement.create",
@@ -165,9 +225,16 @@
           "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
+          "department.lab.update",
+          "department.lab.view",
+          "department.program.update",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.update",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.create",
+          "department.timetable.update",
+          "department.timetable.view"
         ],
         "deptadmin_sm": [
           "department.announcement.create",
@@ -177,9 +244,16 @@
           "department.feedback.view",
           "department.inventory.create",
           "department.inventory.view",
+          "department.lab.update",
+          "department.lab.view",
+          "department.program.update",
+          "department.program.view",
           "department.stock_movement.view",
           "department.stock_request.update",
-          "department.stock_request.view"
+          "department.stock_request.view",
+          "department.timetable.create",
+          "department.timetable.update",
+          "department.timetable.view"
         ],
         "faculty": [
           "department.announcement.create",
@@ -187,13 +261,17 @@
           "department.department.view",
           "department.feedback.create",
           "department.feedback.view",
-          "department.stock_request.create"
+          "department.lab.view",
+          "department.program.view",
+          "department.stock_request.create",
+          "department.timetable.view"
         ],
         "student": [
           "department.announcement.view",
           "department.department.view",
           "department.feedback.create",
-          "department.feedback.view"
+          "department.feedback.view",
+          "department.program.view"
         ]
       },
       "module_grants": [
@@ -296,6 +374,34 @@
         {
           "code": "department.feedback.update",
           "label": "Update department feedback"
+        },
+        {
+          "code": "department.timetable.view",
+          "label": "View department timetable"
+        },
+        {
+          "code": "department.timetable.create",
+          "label": "Create department timetable"
+        },
+        {
+          "code": "department.timetable.update",
+          "label": "Update department timetable"
+        },
+        {
+          "code": "department.lab.view",
+          "label": "View department lab information"
+        },
+        {
+          "code": "department.lab.update",
+          "label": "Update department lab information"
+        },
+        {
+          "code": "department.program.view",
+          "label": "View department program listings"
+        },
+        {
+          "code": "department.program.update",
+          "label": "Update department program listings"
         }
       ],
       "scope_permissions": [],

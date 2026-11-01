@@ -1,5 +1,7 @@
 import pytest
-from modules.department.domain.feedback import IllegalTransition, TRANSITIONS, next_state
+
+from modules.department.domain.feedback import TRANSITIONS, IllegalTransition, next_state
+
 
 def test_transitions_keys():
     """
