@@ -9,6 +9,8 @@ NAV_ITEMS = []
 
 PERMISSIONS = [
     ("department.department.view", "View department listings"),
+    ("department.role_assignment.view", "View department role assignments"),
+    ("department.role_assignment.assign", "Assign department roles"),
 ]
 
 SYSTEM_PERMISSIONS = []
@@ -16,7 +18,7 @@ SYSTEM_PERMISSIONS = []
 ROLE_GRANTS = {
     "student": ["department.department.view"],
     "faculty": ["department.department.view"],
-    "acadadmin": ["department.department.view"],
+    "acadadmin": ["department.department.view", "department.role_assignment.view", "department.role_assignment.assign"],
     "HOD (CSE)": ["department.department.view"],
     "HOD (Design)": ["department.department.view"],
     "HOD (ECE)": ["department.department.view"],

@@ -1,7 +1,9 @@
 from django.urls import path
 
-from modules.department.api.views import DepartmentListView
+from modules.department.api import role_assignments_views as ra
+from modules.department.api import views as v
 
 urlpatterns = [
-    path("departments", DepartmentListView.as_view(), name="department-departments"),
+    path("departments", v.DepartmentListView.as_view(), name="department-departments"),
+    path("assignments", ra.RoleAssignmentListView.as_view(), name="department-assignments"),
 ]

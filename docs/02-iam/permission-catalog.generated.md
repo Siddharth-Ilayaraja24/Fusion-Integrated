@@ -12,6 +12,8 @@ For the intended taxonomy of modules not yet built, see
 | Code | What it allows | Held by |
 |---|---|---|
 | `department.department.view` | View department listings | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `acadadmin`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm`, `faculty`, `student` |
+| `department.role_assignment.view` | View department role assignments | `acadadmin` |
+| `department.role_assignment.assign` | Assign department roles | `acadadmin` |
 
 ## `directory`
 

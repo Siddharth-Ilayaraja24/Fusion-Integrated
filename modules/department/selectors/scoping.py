@@ -11,6 +11,7 @@ from django.db.models import Q, QuerySet
 
 from modules.department.domain import roles as role_domain
 from modules.department.models import Department
+from modules.department.selectors import role_assignments
 from modules.directory import contracts as directory
 
 # Permission codes.
@@ -54,11 +55,18 @@ def member_department_codes(actor) -> list[str]:
 
 def visible_departments(actor) -> QuerySet[Department]:
     """Returns active departments the actor is a member of or sees all."""
-    # For now, only institute_admin and roles starting with HOD see all active departments.
-    # Slice 1 extends this for HOD and Dept_Admin.
     role_kind_val = role_domain.role_kind(actor.active_role)
-    if role_kind_val in ("institute_admin", "hod", "dept_admin"):
+
+    if role_kind_val == "institute_admin":
         return Department.objects.filter(is_active=True)
+
+    if role_kind_val in ("hod", "dept_admin"):
+        # HOD/Dept_Admin sees only departments they currently hold the role for
+        dept_ids = role_assignments.held_department_ids(actor.user_id, role_kind_val, now=None)
+        return Department.objects.filter(
+            is_active=True,
+            id__in=dept_ids
+        )
 
     codes = member_department_codes(actor)
     if not codes:
@@ -69,3 +77,14 @@ def visible_departments(actor) -> QuerySet[Department]:
         is_active=True,
         code__in=codes
     )
+
+
+def department_ids_for_role(actor, kind) -> set[int]:
+    """Returns department IDs where the actor currently holds the specified role kind."""
+    role_kind_val = role_domain.role_kind(actor.active_role)
+    if role_kind_val != kind:
+        return set()
+
+    # Use the selector to find department IDs where the actor holds this role
+    dept_ids = role_assignments.held_department_ids(actor.user_id, kind, now=None)
+    return set(dept_ids)

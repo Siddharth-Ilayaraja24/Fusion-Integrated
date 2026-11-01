@@ -21,7 +21,9 @@
           "department.department.view"
         ],
         "acadadmin": [
-          "department.department.view"
+          "department.department.view",
+          "department.role_assignment.assign",
+          "department.role_assignment.view"
         ],
         "dept_admin": [
           "department.department.view"
@@ -86,6 +88,14 @@
         {
           "code": "department.department.view",
           "label": "View department listings"
+        },
+        {
+          "code": "department.role_assignment.view",
+          "label": "View department role assignments"
+        },
+        {
+          "code": "department.role_assignment.assign",
+          "label": "Assign department roles"
         }
       ],
       "scope_permissions": [],

@@ -46,6 +46,82 @@ paths:
               schema:
                 $ref: '#/components/schemas/Ok'
           description: ''
+  /api/v1/department/assignments:
+    get:
+      operationId: v1_department_assignments_list
+      description: Lists and creates role assignments for departments.
+      summary: List and create department role assignments
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRoleAssignmentList'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRoleAssignmentList'
+          description: ''
+        '400':
+          description: No response body
+        '403':
+          description: No response body
+    post:
+      operationId: v1_department_assignments_create
+      description: Lists and creates role assignments for departments.
+      summary: List and create department role assignments
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleAssignmentCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RoleAssignmentCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RoleAssignmentCreate'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleAssignment'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleAssignment'
+          description: ''
+        '400':
+          description: No response body
+        '403':
+          description: No response body
   /api/v1/department/departments:
     get:
       operationId: v1_department_departments_list
@@ -2349,7 +2425,6 @@ components:
         * `misrepresentation` - False resume or unfair means (r18)
     Department:
       type: object
-      description: Serializer for Department objects.
       properties:
         id:
           type: integer
@@ -2381,8 +2456,14 @@ components:
             maxLength: 200
           - type: string
             maxLength: 0
+        headship:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          readOnly: true
       required:
       - code
+      - headship
       - id
       - name
     Detail:
@@ -3089,6 +3170,25 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Offer'
+    PaginatedRoleAssignmentList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleAssignment'
     PatchedJobPosting:
       type: object
       properties:
@@ -3555,6 +3655,79 @@ components:
       - message
       - reason
       - route
+    RoleAssignment:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department:
+          type: integer
+        role:
+          $ref: '#/components/schemas/RoleAssignmentRoleEnum'
+        user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        valid_from:
+          type: string
+          format: date-time
+        valid_to:
+          type: string
+          format: date-time
+        assigned_by_user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        transition_applied_at:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - assigned_by_user_id
+      - department
+      - id
+      - role
+      - user_id
+      - valid_from
+      - valid_to
+    RoleAssignmentCreate:
+      type: object
+      properties:
+        department:
+          type: integer
+        role:
+          $ref: '#/components/schemas/RoleAssignmentCreateRoleEnum'
+        user_id:
+          type: integer
+        valid_from:
+          type: string
+          format: date-time
+        valid_to:
+          type: string
+          format: date-time
+      required:
+      - department
+      - role
+      - user_id
+      - valid_from
+      - valid_to
+    RoleAssignmentCreateRoleEnum:
+      enum:
+      - hod
+      - dept_admin
+      type: string
+      description: |-
+        * `hod` - hod
+        * `dept_admin` - dept_admin
+    RoleAssignmentRoleEnum:
+      enum:
+      - hod
+      - dept_admin
+      type: string
+      description: |-
+        * `hod` - Head of Department
+        * `dept_admin` - Department Administrator
     RoundOutcome:
       type: object
       properties:
