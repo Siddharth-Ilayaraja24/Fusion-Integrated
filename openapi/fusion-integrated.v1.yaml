@@ -355,6 +355,38 @@ paths:
           description: ''
         '403':
           description: No response body
+  /api/v1/department/departments/{id}:
+    patch:
+      operationId: v1_department_departments_partial_update
+      description: Updates department details.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDeptDetailsWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDeptDetailsWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDeptDetailsWrite'
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptDetailsWrite'
+          description: ''
   /api/v1/department/feedback:
     get:
       operationId: v1_department_feedback_list
@@ -696,6 +728,193 @@ paths:
           description: No response body
         '403':
           description: No response body
+  /api/v1/department/official-changes:
+    get:
+      operationId: v1_department_official_changes_list
+      description: Lists visible official change proposals.
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeptOfficialChangeList'
+          description: ''
+  /api/v1/department/official-changes/{id}/decide:
+    post:
+      operationId: v1_department_official_changes_decide_create
+      description: Decides on the change proposal.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptChangeDecision'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeptChangeDecision'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeptChangeDecision'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptChangeDecision'
+          description: ''
+  /api/v1/department/profiles:
+    get:
+      operationId: department_profile_list
+      description: Retrieves a list of visible profiles.
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptProfileWrite'
+          description: ''
+    post:
+      operationId: v1_department_profiles_create
+      description: Creates a new department profile.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptProfileWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeptProfileWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeptProfileWrite'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptProfileWrite'
+          description: ''
+  /api/v1/department/profiles/{id}:
+    get:
+      operationId: department_profile_detail
+      description: Retrieves a specific profile, returning NotFoundError if not visible.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptProfileWrite'
+          description: ''
+    patch:
+      operationId: v1_department_profiles_partial_update
+      description: Updates a specific department profile.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDeptProfileWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDeptProfileWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDeptProfileWrite'
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptProfileWrite'
+          description: ''
+  /api/v1/department/profiles/{id}/deactivate:
+    post:
+      operationId: v1_department_profiles_deactivate_create
+      description: Deactivates the profile.
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptProfileWrite'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeptProfileWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeptProfileWrite'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptProfileWrite'
+          description: ''
   /api/v1/department/programs:
     get:
       operationId: v1_department_programs_list
@@ -809,6 +1028,60 @@ paths:
           description: No response body
         '403':
           description: No response body
+  /api/v1/department/rosters:
+    get:
+      operationId: v1_department_rosters_list
+      description: Lists and creates department rosters.
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - name: limit
+        required: false
+        in: query
+        description: Number of results to return per page.
+        schema:
+          type: integer
+      tags:
+      - v1
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedDeptRosterList'
+          description: ''
+    post:
+      operationId: v1_department_rosters_create
+      description: Lists and creates department rosters.
+      tags:
+      - v1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeptRoster'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DeptRoster'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DeptRoster'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeptRoster'
+          description: ''
   /api/v1/department/stock-history:
     get:
       operationId: v1_department_stock_history_list
@@ -3569,6 +3842,36 @@ components:
       - body
       - target_roles
       - title
+    DeptChangeDecision:
+      type: object
+      description: Serializes the outcome of a change decision.
+      properties:
+        outcome:
+          type: string
+      required:
+      - outcome
+    DeptDetailsWrite:
+      type: object
+      description: Serializes optional details for department profiles.
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        core_policies: {}
+        about:
+          type: string
+          maxLength: 2000
+        contact_email:
+          type: string
+          format: email
+        location:
+          type: string
+          maxLength: 255
+        website:
+          type: string
+          format: uri
+        headship:
+          type: boolean
     DeptFeedback:
       type: object
       description: Serializes a Feedback model instance.
@@ -3703,6 +4006,76 @@ components:
       - department
       - id
       - name
+    DeptOfficialChange:
+      type: object
+      description: Serializes a DepartmentOfficialChangeProposal model instance.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department:
+          type: integer
+        changes: {}
+        state:
+          $ref: '#/components/schemas/DeptOfficialChangeStateEnum'
+        proposed_by_user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        decided_by_user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        decided_at:
+          type: string
+          format: date-time
+          nullable: true
+      required:
+      - changes
+      - department
+      - id
+      - proposed_by_user_id
+    DeptOfficialChangeStateEnum:
+      enum:
+      - pending_hod_approval
+      - approved
+      - rejected
+      type: string
+      description: |-
+        * `pending_hod_approval` - Pending HOD Approval
+        * `approved` - Approved
+        * `rejected` - Rejected
+    DeptProfileWrite:
+      type: object
+      description: Serializes data for creating/updating a DepartmentProfile.
+      properties:
+        department:
+          type: integer
+        record_kind:
+          $ref: '#/components/schemas/RecordKindEnum'
+        user_id:
+          type: integer
+        display_name:
+          type: string
+          maxLength: 255
+        email:
+          type: string
+          format: email
+        title:
+          type: string
+          maxLength: 255
+        office:
+          type: string
+          maxLength: 255
+        bio:
+          type: string
+          maxLength: 1000
+        graduation_year:
+          type: integer
+      required:
+      - department
+      - record_kind
     DeptProgram:
       type: object
       description: Serializes an AcademicProgram model instance (read and writable).
@@ -3724,6 +4097,36 @@ components:
       - department
       - id
       - name
+    DeptRoster:
+      type: object
+      description: Serializes a CourseRoster model instance.
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department:
+          type: integer
+        course_code:
+          type: string
+          maxLength: 50
+        faculty_user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        student_user_id:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        academic_year:
+          type: string
+          maxLength: 10
+      required:
+      - academic_year
+      - course_code
+      - department
+      - faculty_user_id
+      - id
+      - student_user_id
     DeptSlotUpload:
       type: object
       description: Serializes data for uploading multiple timetable slots.
@@ -4670,6 +5073,25 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DeptLab'
+    PaginatedDeptOfficialChangeList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeptOfficialChange'
     PaginatedDeptProgramList:
       type: object
       required:
@@ -4689,6 +5111,25 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DeptProgram'
+    PaginatedDeptRosterList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeptRoster'
     PaginatedDeptStockMovementList:
       type: object
       required:
@@ -4856,6 +5297,28 @@ components:
           type: string
           format: date-time
           readOnly: true
+    PatchedDeptDetailsWrite:
+      type: object
+      description: Serializes optional details for department profiles.
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        core_policies: {}
+        about:
+          type: string
+          maxLength: 2000
+        contact_email:
+          type: string
+          format: email
+        location:
+          type: string
+          maxLength: 255
+        website:
+          type: string
+          format: uri
+        headship:
+          type: boolean
     PatchedDeptLab:
       type: object
       description: Serializes a LabResource model instance (read and writable).
@@ -4879,6 +5342,33 @@ components:
         notes:
           type: string
         department:
+          type: integer
+    PatchedDeptProfileWrite:
+      type: object
+      description: Serializes data for creating/updating a DepartmentProfile.
+      properties:
+        department:
+          type: integer
+        record_kind:
+          $ref: '#/components/schemas/RecordKindEnum'
+        user_id:
+          type: integer
+        display_name:
+          type: string
+          maxLength: 255
+        email:
+          type: string
+          format: email
+        title:
+          type: string
+          maxLength: 255
+        office:
+          type: string
+          maxLength: 255
+        bio:
+          type: string
+          maxLength: 1000
+        graduation_year:
           type: integer
     PatchedDeptProgram:
       type: object
@@ -5187,6 +5677,16 @@ components:
         * `consent_failure` - consent_failure
         * `code_of_conduct` - code_of_conduct
         * `misrepresentation` - misrepresentation
+    RecordKindEnum:
+      enum:
+      - faculty
+      - student
+      - alumni
+      type: string
+      description: |-
+        * `faculty` - Faculty
+        * `student` - Student
+        * `alumni` - Alumni
     RecruiterAccept:
       type: object
       properties:

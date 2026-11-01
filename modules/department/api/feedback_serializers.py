@@ -46,9 +46,4 @@ class DeptFeedbackReviewSerializer(serializers.Serializer):
 
 class DeptFeedbackDisposeSerializer(serializers.Serializer):
     """Serializes data for disposing of a Feedback submission."""
-    outcome = serializers.ChoiceField(
-        choices=[
-            ('resolved', 'Resolved'),
-            ('closed', 'Closed'),
-        ],
-    )
+    outcome = serializers.CharField()

@@ -3,6 +3,7 @@ from django.urls import path
 from modules.department.api import announcements_views as an
 from modules.department.api import feedback_views as fb
 from modules.department.api import inventory_stock_views as st
+from modules.department.api import profiles_views as pr
 from modules.department.api import role_assignments_views as ra
 from modules.department.api import timetable_views as tt
 from modules.department.api import views as v
@@ -28,4 +29,11 @@ urlpatterns = [
     path("labs/<int:pk>", tt.LabDetailView.as_view(), name="department-labs-detail"),
     path("programs", tt.ProgramListView.as_view(), name="department-programs"),
     path("programs/<int:pk>", tt.ProgramDetailView.as_view(), name="department-programs-detail"),
+    path("profiles", pr.ProfileListView.as_view(), name="department-profiles"),
+    path("profiles/<int:pk>", pr.ProfileDetailView.as_view(), name="department-profiles-detail"),
+    path("profiles/<int:pk>/deactivate", pr.ProfileDeactivateView.as_view(), name="department-profiles-deactivate"),
+    path("rosters", pr.RosterListView.as_view(), name="department-rosters"),
+    path("departments/<int:pk>", pr.DepartmentDetailsView.as_view(), name="department-departments-detail"),
+    path("official-changes", pr.OfficialChangeListView.as_view(), name="department-official-changes"),
+    path("official-changes/<int:pk>/decide", pr.OfficialChangeDecideView.as_view(), name="department-official-changes-decide"),
 ]
