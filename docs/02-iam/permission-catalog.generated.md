@@ -7,6 +7,43 @@ guards on, and every designation column is one the IAM can grant.
 For the intended taxonomy of modules not yet built, see
 [permission-catalog.md](permission-catalog.md).
 
+## `department`
+
+| Code | What it allows | Held by |
+|---|---|---|
+| `department.department.view` | View department overview and details | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `acadadmin`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm`, `faculty`, `student` |
+| `department.department.update` | Update general details and propose official changes | `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.official_change.view` | View pending and decided official department changes | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.official_change.approve` | Approve or reject official department changes | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)` |
+| `department.announcement.view` | View relevant department announcements | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm`, `faculty`, `student` |
+| `department.announcement.create` | Create and publish department announcements | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm`, `faculty` |
+| `department.announcement.update` | Edit or hide active department announcements | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)` |
+| `department.announcement.delete` | Delete active department announcements | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)` |
+| `department.inventory.view` | View department inventory items | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm`, `faculty` |
+| `department.inventory.create` | Insert stock records into department inventory | `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.stock_request.view` | View stock requests within scope | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm`, `faculty` |
+| `department.stock_request.create` | Submit Faculty stock requests | `faculty` |
+| `department.stock_request.approve` | Approve or reject pending stock requests | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)` |
+| `department.stock_request.update` | Issue HOD-approved stock requests | `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.stock_movement.view` | View immutable stock movement audit log | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm`, `faculty` |
+| `department.feedback.view` | View confidential feedback within scope | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm`, `faculty`, `student` |
+| `department.feedback.create` | Submit confidential department feedback | `faculty`, `student` |
+| `department.feedback.review` | Perform initial review and categorization of feedback | `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.feedback.update` | Resolve or close reviewed feedback | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.timetable.view` | View class and lab timetables | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm`, `faculty`, `student` |
+| `department.timetable.create` | Upload class and lab timetables | `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.timetable.update` | Modify existing class and lab timetables | `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.lab.view` | View department lab equipment and resource profiles | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm`, `faculty` |
+| `department.lab.update` | Update department lab equipment and resource profiles | `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.program.view` | View department academic program information | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm`, `faculty`, `student` |
+| `department.program.update` | Manage department academic program information | `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.profile.view` | View department user profiles under visibility rules | `HOD (CSE)`, `HOD (Design)`, `HOD (ECE)`, `HOD (Liberal Arts)`, `HOD (ME)`, `HOD (NS)`, `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm`, `faculty`, `student` |
+| `department.profile.update` | Manage Faculty, Student, and Alumni profiles | `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.roster.update` | Manage Faculty-Student course enrollment roster | `dept_admin`, `deptadmin_cse`, `deptadmin_design`, `deptadmin_ece`, `deptadmin_liberalarts`, `deptadmin_me`, `deptadmin_ns`, `deptadmin_sm` |
+| `department.role_assignment.view` | View department HOD and Dept_Admin role assignments | `acadadmin` |
+| `department.role_assignment.assign` | Assign time-bound HOD and Dept_Admin roles | `acadadmin` |
+| `department.role_assignment.revoke` | System effective-date role transition | _service only_ |
+
 ## `directory`
 
 | Code | What it allows | Held by |

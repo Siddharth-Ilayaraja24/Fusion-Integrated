@@ -46,6 +46,1220 @@ paths:
               schema:
                 $ref: '#/components/schemas/Ok'
           description: ''
+  /api/v1/department/announcements:
+    get:
+      operationId: v1_department_announcements_list
+      summary: List relevant department announcements
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnnouncementRead'
+              examples:
+                Announcements:
+                  value:
+                  - results: []
+                  summary: announcements
+          description: ''
+    post:
+      operationId: v1_department_announcements_create
+      summary: Create and publish a targeted department announcement
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnnouncementCreate'
+            examples:
+              CreateAnn:
+                value:
+                  department_id: 1
+                  title: Mid-sem lab schedule
+                  content: Labs start Monday.
+                  target_roles:
+                  - student
+                  - faculty
+                summary: create_ann
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AnnouncementCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AnnouncementCreate'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnnouncementRead'
+          description: ''
+  /api/v1/department/announcements/{id}:
+    get:
+      operationId: v1_department_announcements_retrieve
+      summary: Retrieve a single relevant announcement
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnnouncementRead'
+              examples:
+                Ann:
+                  value:
+                    id: 1
+                    title: Notice
+                  summary: ann
+          description: ''
+    patch:
+      operationId: v1_department_announcements_partial_update
+      summary: Edit an active department announcement (HOD)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedAnnouncementUpdate'
+            examples:
+              EditAnn:
+                value:
+                  title: Updated title
+                summary: edit_ann
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedAnnouncementUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedAnnouncementUpdate'
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnnouncementRead'
+          description: ''
+    delete:
+      operationId: v1_department_announcements_destroy
+      summary: Delete an active department announcement (HOD)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '204':
+          description: No response body
+  /api/v1/department/announcements/{id}/hide:
+    post:
+      operationId: v1_department_announcements_hide_create
+      summary: Hide an active department announcement (HOD)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnnouncementRead'
+              examples:
+                HideAnn:
+                  value:
+                    id: 1
+                    status: hidden
+                  summary: hide_ann
+          description: ''
+  /api/v1/department/departments:
+    get:
+      operationId: v1_department_departments_list
+      summary: List departments visible to the caller
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DepartmentRead'
+              examples:
+                DepartmentList:
+                  value:
+                  - next: null
+                    previous: null
+                    results:
+                    - id: 1
+                      code: CSE
+                  summary: department_list
+          description: ''
+  /api/v1/department/departments/{id}:
+    get:
+      operationId: v1_department_departments_retrieve
+      summary: Retrieve a department record
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentRead'
+              examples:
+                Dept:
+                  value:
+                    id: 1
+                    code: CSE
+                  summary: dept
+          description: ''
+    patch:
+      operationId: v1_department_departments_partial_update
+      summary: Update general non-official department information
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDepartmentGeneralUpdate'
+            examples:
+              UpdateGeneral:
+                value:
+                  description: Department of CSE
+                  location: Core Lab Complex
+                summary: update_general
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDepartmentGeneralUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDepartmentGeneralUpdate'
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentRead'
+          description: ''
+  /api/v1/department/feedback:
+    get:
+      operationId: v1_department_feedback_list
+      summary: List confidential feedback visible to caller
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FeedbackRead'
+              examples:
+                FbList:
+                  value:
+                  - results: []
+                  summary: fb_list
+          description: ''
+    post:
+      operationId: v1_department_feedback_create
+      summary: Submit confidential department feedback (Student or Faculty)
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackCreate'
+            examples:
+              SubmitFb:
+                value:
+                  department_id: 1
+                  subject: Lab projector
+                  body: Projector in L-204 flickers.
+                summary: submit_fb
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FeedbackCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FeedbackCreate'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackRead'
+          description: ''
+  /api/v1/department/feedback/{id}/dispose:
+    post:
+      operationId: v1_department_feedback_dispose_create
+      summary: Resolve or close reviewed feedback (Dept_Admin or HOD)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackDispose'
+            examples:
+              DisposeFb:
+                value:
+                  status: resolved
+                  note: Projector bulb replaced.
+                summary: dispose_fb
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FeedbackDispose'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FeedbackDispose'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackRead'
+          description: ''
+  /api/v1/department/feedback/{id}/review:
+    post:
+      operationId: v1_department_feedback_review_create
+      summary: Perform initial review and categorization of new feedback (Dept_Admin)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackReview'
+            examples:
+              ReviewFb:
+                value:
+                  category: Infrastructure
+                  close_as_simple: false
+                  note: Logged
+                summary: review_fb
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FeedbackReview'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FeedbackReview'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackRead'
+          description: ''
+  /api/v1/department/inventory:
+    get:
+      operationId: v1_department_inventory_list
+      summary: List department inventory items
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventoryItemRead'
+              examples:
+                InvList:
+                  value:
+                  - results: []
+                  summary: inv_list
+          description: ''
+    post:
+      operationId: v1_department_inventory_create
+      summary: Insert stock into department inventory (Dept_Admin)
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryInsert'
+            examples:
+              InsertStock:
+                value:
+                  department_id: 1
+                  sku: HDMI-01
+                  name: HDMI Cable
+                  quantity: 10
+                summary: insert_stock
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/InventoryInsert'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/InventoryInsert'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryItemRead'
+          description: ''
+  /api/v1/department/labs:
+    get:
+      operationId: v1_department_labs_list
+      summary: List department lab equipment and resource profiles
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LabResourceRead'
+              examples:
+                Labs:
+                  value:
+                  - results: []
+                  summary: labs
+          description: ''
+    post:
+      operationId: v1_department_labs_create
+      summary: Create a lab equipment/resource profile (Dept_Admin)
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabResourceWrite'
+            examples:
+              CreateLab:
+                value:
+                  department_id: 1
+                  lab_code: CSE-ML1
+                  name: AI & ML Lab
+                  capacity: 40
+                summary: create_lab
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/LabResourceWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LabResourceWrite'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabResourceRead'
+          description: ''
+  /api/v1/department/labs/{id}:
+    patch:
+      operationId: v1_department_labs_partial_update
+      summary: Update a lab equipment/resource profile (Dept_Admin)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedLabResourceWrite'
+            examples:
+              UpdLab:
+                value:
+                  name: AI Lab
+                  capacity: 45
+                summary: upd_lab
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedLabResourceWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedLabResourceWrite'
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabResourceRead'
+          description: ''
+  /api/v1/department/official-changes:
+    get:
+      operationId: v1_department_official_changes_list
+      summary: List official department-detail change requests
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OfficialChangeRead'
+              examples:
+                Changes:
+                  value:
+                  - results: []
+                  summary: changes
+          description: ''
+    post:
+      operationId: v1_department_official_changes_create
+      summary: Propose an official department-detail change for HOD approval
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfficialChangeCreate'
+            examples:
+              ProposeChange:
+                value:
+                  department_id: 1
+                  field_name: core_policies
+                  proposed_value: Updated lab safety policy
+                summary: propose_change
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OfficialChangeCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OfficialChangeCreate'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfficialChangeRead'
+          description: ''
+  /api/v1/department/official-changes/{id}/decide:
+    post:
+      operationId: v1_department_official_changes_decide_create
+      summary: Approve or reject a pending official department-detail change
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfficialChangeDecide'
+            examples:
+              ApproveChange:
+                value:
+                  approve: true
+                  note: Approved
+                summary: approve_change
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OfficialChangeDecide'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OfficialChangeDecide'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfficialChangeRead'
+          description: ''
+  /api/v1/department/profiles:
+    get:
+      operationId: v1_department_profiles_list
+      summary: List department user profiles projected for caller visibility scope
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DepartmentProfileRead'
+              examples:
+                Profiles:
+                  value:
+                  - results: []
+                  summary: profiles
+          description: ''
+    post:
+      operationId: v1_department_profiles_create
+      summary: Create a department user profile (Dept_Admin)
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentProfileWrite'
+            examples:
+              CreateProf:
+                value:
+                  department_id: 1
+                  user_id: 1001
+                  profile_kind: student
+                  display_name: Asha Verma
+                  program: BTech
+                  academic_year: '2026'
+                summary: create_prof
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DepartmentProfileWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DepartmentProfileWrite'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentProfileRead'
+          description: ''
+  /api/v1/department/profiles/{id}:
+    get:
+      operationId: v1_department_profiles_retrieve
+      summary: Retrieve a department user profile projected for caller visibility
+        scope
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentProfileRead'
+              examples:
+                Prof:
+                  value:
+                    id: 1
+                    display_name: Asha
+                  summary: prof
+          description: ''
+    patch:
+      operationId: v1_department_profiles_partial_update
+      summary: Update a department user profile (Dept_Admin)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDepartmentProfileWrite'
+            examples:
+              UpdProf:
+                value:
+                  display_name: Asha V.
+                summary: upd_prof
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDepartmentProfileWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDepartmentProfileWrite'
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentProfileRead'
+          description: ''
+  /api/v1/department/programs:
+    get:
+      operationId: v1_department_programs_list
+      summary: List department academic programs
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DepartmentProgramRead'
+              examples:
+                Programs:
+                  value:
+                  - results: []
+                  summary: programs
+          description: ''
+    post:
+      operationId: v1_department_programs_create
+      summary: Create a department academic program (Dept_Admin)
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentProgramWrite'
+            examples:
+              CreateProg:
+                value:
+                  department_id: 1
+                  code: BTECH-CSE
+                  name: B.Tech CSE
+                  degree_level: UG
+                  duration_years: 4
+                summary: create_prog
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/DepartmentProgramWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/DepartmentProgramWrite'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentProgramRead'
+          description: ''
+  /api/v1/department/programs/{id}:
+    patch:
+      operationId: v1_department_programs_partial_update
+      summary: Update a department academic program (Dept_Admin)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDepartmentProgramWrite'
+            examples:
+              UpdProg:
+                value:
+                  name: B.Tech CSE (Hons)
+                summary: upd_prog
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDepartmentProgramWrite'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDepartmentProgramWrite'
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DepartmentProgramRead'
+          description: ''
+  /api/v1/department/role-assignments:
+    get:
+      operationId: v1_department_role_assignments_list
+      summary: List time-bound department HOD and Dept_Admin role assignments
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RoleAssignmentRead'
+              examples:
+                Roles:
+                  value:
+                  - results: []
+                  summary: roles
+          description: ''
+    post:
+      operationId: v1_department_role_assignments_create
+      summary: Assign a time-bound HOD or Dept_Admin role (Institute Admin)
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleAssignmentCreate'
+            examples:
+              AssignRole:
+                value:
+                  department_id: 1
+                  role_type: hod
+                  user_id: 2001
+                  valid_from: '2026-08-01T00:00:00Z'
+                  valid_to: '2028-07-31T23:59:59Z'
+                summary: assign_role
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RoleAssignmentCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RoleAssignmentCreate'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleAssignmentRead'
+          description: ''
+  /api/v1/department/roster:
+    get:
+      operationId: v1_department_roster_list
+      summary: List course enrollments within caller scope
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseEnrollmentRead'
+              examples:
+                Roster:
+                  value:
+                  - results: []
+                  summary: roster
+          description: ''
+    post:
+      operationId: v1_department_roster_create
+      summary: Register a Faculty-Student course enrollment link (Dept_Admin)
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseEnrollmentCreate'
+            examples:
+              AddEnroll:
+                value:
+                  department_id: 1
+                  course_code: CS201
+                  faculty_user_id: 2001
+                  student_user_id: 1001
+                summary: add_enroll
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CourseEnrollmentCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CourseEnrollmentCreate'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseEnrollmentRead'
+          description: ''
+  /api/v1/department/stock-movements:
+    get:
+      operationId: v1_department_stock_movements_list
+      summary: List immutable stock movement history within caller scope
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StockMovementRead'
+              examples:
+                Movements:
+                  value:
+                  - results: []
+                  summary: movements
+          description: ''
+  /api/v1/department/stock-requests:
+    get:
+      operationId: v1_department_stock_requests_list
+      summary: List stock requests within caller scope
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StockRequestRead'
+              examples:
+                SrList:
+                  value:
+                  - results: []
+                  summary: sr_list
+          description: ''
+    post:
+      operationId: v1_department_stock_requests_create
+      summary: Submit a Faculty stock request
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockRequestCreate'
+            examples:
+              ReqStock:
+                value:
+                  item_id: 1
+                  requested_quantity: 2
+                  purpose: Lab practicals
+                summary: req_stock
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StockRequestCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StockRequestCreate'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockRequestRead'
+          description: ''
+  /api/v1/department/stock-requests/{id}/decide:
+    post:
+      operationId: v1_department_stock_requests_decide_create
+      summary: Approve or reject a pending Faculty stock request (HOD)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockRequestDecide'
+            examples:
+              Decide:
+                value:
+                  approve: true
+                  note: OK
+                summary: decide
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StockRequestDecide'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StockRequestDecide'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockRequestRead'
+          description: ''
+  /api/v1/department/stock-requests/{id}/issue:
+    post:
+      operationId: v1_department_stock_requests_issue_create
+      summary: Issue stock for a HOD-approved request (Dept_Admin)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StockRequestIssue'
+            examples:
+              Issue:
+                value:
+                  note: Issued from store
+                summary: issue
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StockRequestIssue'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StockRequestIssue'
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockRequestRead'
+          description: ''
+  /api/v1/department/timetables:
+    get:
+      operationId: v1_department_timetables_list
+      summary: List active class and lab timetable slots
+      tags:
+      - department
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TimetableSlotRead'
+              examples:
+                TtList:
+                  value:
+                  - results: []
+                  summary: tt_list
+          description: ''
+    post:
+      operationId: v1_department_timetables_create
+      summary: Upload a conflict-free timetable slot (Dept_Admin)
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TimetableSlotCreate'
+            examples:
+              CreateSlot:
+                value:
+                  department_id: 1
+                  slot_kind: class
+                  program: BTech
+                  academic_year: 2026-27
+                  section: A
+                  course_code: CS201
+                  course_title: Data Structures
+                  room: L-101
+                  day_of_week: 1
+                  start_time: 09:00:00
+                  end_time: '10:00:00'
+                summary: create_slot
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TimetableSlotCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TimetableSlotCreate'
+        required: true
+      security:
+      - iamSession: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimetableSlotRead'
+          description: ''
+  /api/v1/department/timetables/{id}:
+    patch:
+      operationId: v1_department_timetables_partial_update
+      summary: Modify an existing timetable slot with conflict validation (Dept_Admin)
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - department
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTimetableSlotUpdate'
+            examples:
+              UpdSlot:
+                value:
+                  room: L-102
+                summary: upd_slot
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTimetableSlotUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTimetableSlotUpdate'
+      security:
+      - iamSession: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TimetableSlotRead'
+          description: ''
   /api/v1/directory/users:
     get:
       operationId: v1_directory_users_retrieve
@@ -1827,6 +3041,89 @@ components:
       - title
       - topic
       - withdrawn_reason
+    AnnouncementCreate:
+      type: object
+      properties:
+        department_id:
+          type: integer
+        title:
+          type: string
+          maxLength: 200
+        content:
+          type: string
+        target_roles:
+          type: array
+          items:
+            type: string
+        target_programs:
+          type: array
+          items:
+            type: string
+        target_academic_years:
+          type: array
+          items:
+            type: string
+      required:
+      - content
+      - department_id
+      - target_roles
+      - title
+    AnnouncementRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department_id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          readOnly: true
+        content:
+          type: string
+          readOnly: true
+        target_roles:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        target_programs:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        target_academic_years:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        status:
+          type: string
+          readOnly: true
+        created_by_user_id:
+          type: integer
+          readOnly: true
+        updated_by_user_id:
+          type: integer
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - content
+      - created_at
+      - created_by_user_id
+      - department_id
+      - id
+      - status
+      - target_academic_years
+      - target_programs
+      - target_roles
+      - title
+      - updated_by_user_id
     Application:
       type: object
       properties:
@@ -2315,6 +3612,301 @@ components:
         * `consent_failure` - Did not appear after consenting (r19)
         * `code_of_conduct` - Code of conduct (r21)
         * `misrepresentation` - False resume or unfair means (r18)
+    CourseEnrollmentCreate:
+      type: object
+      properties:
+        department_id:
+          type: integer
+        course_code:
+          type: string
+          maxLength: 32
+        faculty_user_id:
+          type: integer
+        student_user_id:
+          type: integer
+        academic_year:
+          type: string
+          default: ''
+          maxLength: 32
+      required:
+      - course_code
+      - department_id
+      - faculty_user_id
+      - student_user_id
+    CourseEnrollmentRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department_id:
+          type: integer
+          readOnly: true
+        course_code:
+          type: string
+          readOnly: true
+        faculty_user_id:
+          type: integer
+          readOnly: true
+        student_user_id:
+          type: integer
+          readOnly: true
+        academic_year:
+          type: string
+          readOnly: true
+      required:
+      - academic_year
+      - course_code
+      - department_id
+      - faculty_user_id
+      - id
+      - student_user_id
+    DepartmentProfileRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department_id:
+          type: integer
+          readOnly: true
+        user_id:
+          type: integer
+          readOnly: true
+        profile_kind:
+          type: string
+          readOnly: true
+        display_name:
+          type: string
+          readOnly: true
+        program:
+          type: string
+          readOnly: true
+        visibility_tier:
+          type: string
+          readOnly: true
+        email:
+          readOnly: true
+          oneOf:
+          - type: string
+            format: email
+          - type: string
+            maxLength: 0
+        academic_year:
+          type: string
+          readOnly: true
+        designation_title:
+          type: string
+          readOnly: true
+        office_room:
+          type: string
+          readOnly: true
+        research_area:
+          type: string
+          readOnly: true
+        graduation_year:
+          type: integer
+          readOnly: true
+          nullable: true
+        current_affiliation:
+          type: string
+          readOnly: true
+        academic_notes:
+          type: string
+          readOnly: true
+      required:
+      - academic_notes
+      - academic_year
+      - current_affiliation
+      - department_id
+      - designation_title
+      - display_name
+      - email
+      - graduation_year
+      - id
+      - office_room
+      - profile_kind
+      - program
+      - research_area
+      - user_id
+      - visibility_tier
+    DepartmentProfileWrite:
+      type: object
+      properties:
+        department_id:
+          type: integer
+        user_id:
+          type: integer
+        profile_kind:
+          allOf:
+          - $ref: '#/components/schemas/ProfileKindEnum'
+          default: student
+        display_name:
+          type: string
+          maxLength: 160
+        email:
+          oneOf:
+          - type: string
+            format: email
+            default: ''
+          - type: string
+            maxLength: 0
+        program:
+          type: string
+          default: ''
+          maxLength: 64
+        academic_year:
+          type: string
+          default: ''
+          maxLength: 32
+        designation_title:
+          type: string
+          default: ''
+          maxLength: 120
+        office_room:
+          type: string
+          default: ''
+          maxLength: 64
+        research_area:
+          type: string
+          default: ''
+          maxLength: 200
+        graduation_year:
+          type: integer
+          nullable: true
+        current_affiliation:
+          type: string
+          default: ''
+          maxLength: 160
+        academic_notes:
+          type: string
+          default: ''
+      required:
+      - display_name
+    DepartmentProgramRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department_id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        degree_level:
+          type: string
+          readOnly: true
+        duration_years:
+          type: integer
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        is_active:
+          type: boolean
+          readOnly: true
+      required:
+      - code
+      - degree_level
+      - department_id
+      - description
+      - duration_years
+      - id
+      - is_active
+      - name
+    DepartmentProgramWrite:
+      type: object
+      properties:
+        department_id:
+          type: integer
+        code:
+          type: string
+          default: ''
+          maxLength: 32
+        name:
+          type: string
+          maxLength: 160
+        degree_level:
+          type: string
+          default: UG
+          maxLength: 64
+        duration_years:
+          type: integer
+          maximum: 10
+          minimum: 1
+          default: 4
+        description:
+          type: string
+          default: ''
+        is_active:
+          type: boolean
+          default: true
+      required:
+      - name
+    DepartmentRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        code:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        contact_email:
+          readOnly: true
+          oneOf:
+          - type: string
+            format: email
+          - type: string
+            maxLength: 0
+        location:
+          type: string
+          readOnly: true
+        website_url:
+          readOnly: true
+          oneOf:
+          - type: string
+            format: uri
+          - type: string
+            maxLength: 0
+        core_policies:
+          type: string
+          readOnly: true
+        active_hod_user_id:
+          type: integer
+          readOnly: true
+          nullable: true
+        active_dept_admin_user_id:
+          type: integer
+          readOnly: true
+          nullable: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - active_dept_admin_user_id
+      - active_hod_user_id
+      - code
+      - contact_email
+      - core_policies
+      - description
+      - id
+      - location
+      - name
+      - updated_at
+      - website_url
     Detail:
       type: object
       properties:
@@ -2423,6 +4015,121 @@ components:
       - fee_reference
       - season
       - user_id
+    FeedbackCreate:
+      type: object
+      properties:
+        department_id:
+          type: integer
+        subject:
+          type: string
+          maxLength: 200
+        body:
+          type: string
+      required:
+      - body
+      - department_id
+      - subject
+    FeedbackDispose:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/FeedbackDisposeStatusEnum'
+        note:
+          type: string
+          default: ''
+          maxLength: 300
+      required:
+      - status
+    FeedbackDisposeStatusEnum:
+      enum:
+      - resolved
+      - closed
+      type: string
+      description: |-
+        * `resolved` - resolved
+        * `closed` - closed
+    FeedbackRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department_id:
+          type: integer
+          readOnly: true
+        submitter_user_id:
+          type: integer
+          readOnly: true
+        submitter_role:
+          type: string
+          readOnly: true
+        subject:
+          type: string
+          readOnly: true
+        body:
+          type: string
+          readOnly: true
+        category:
+          type: string
+          readOnly: true
+        status:
+          type: string
+          readOnly: true
+        initial_reviewed_by_user_id:
+          type: integer
+          readOnly: true
+          nullable: true
+        initial_reviewed_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        resolved_by_user_id:
+          type: integer
+          readOnly: true
+          nullable: true
+        resolved_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        resolution_note:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - body
+      - category
+      - created_at
+      - department_id
+      - id
+      - initial_reviewed_at
+      - initial_reviewed_by_user_id
+      - resolution_note
+      - resolved_at
+      - resolved_by_user_id
+      - status
+      - subject
+      - submitter_role
+      - submitter_user_id
+    FeedbackReview:
+      type: object
+      properties:
+        category:
+          type: string
+          maxLength: 80
+        close_as_simple:
+          type: boolean
+          default: false
+        note:
+          type: string
+          default: ''
+          maxLength: 300
+      required:
+      - category
     IncidentRecorded:
       type: object
       properties:
@@ -2508,6 +4215,89 @@ components:
         * `tech` - Technical interview
         * `hr` - HR interview
         * `other` - Other
+    InventoryInsert:
+      type: object
+      properties:
+        department_id:
+          type: integer
+        sku:
+          type: string
+          maxLength: 64
+        name:
+          type: string
+          maxLength: 160
+        quantity:
+          type: integer
+          minimum: 1
+        category:
+          type: string
+          default: ''
+          maxLength: 80
+        unit:
+          type: string
+          default: units
+          maxLength: 32
+        location:
+          type: string
+          default: ''
+          maxLength: 160
+        description:
+          type: string
+          default: ''
+        note:
+          type: string
+          default: ''
+          maxLength: 300
+      required:
+      - department_id
+      - name
+      - quantity
+      - sku
+    InventoryItemRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department_id:
+          type: integer
+          readOnly: true
+        sku:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        category:
+          type: string
+          readOnly: true
+        unit:
+          type: string
+          readOnly: true
+        current_quantity:
+          type: integer
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - category
+      - current_quantity
+      - department_id
+      - description
+      - id
+      - location
+      - name
+      - sku
+      - unit
+      - updated_at
     JobPosting:
       type: object
       properties:
@@ -2637,6 +4427,94 @@ components:
         * `in_progress` - Selection in progress
         * `completed` - Completed
         * `cancelled` - Cancelled
+    LabResourceRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department_id:
+          type: integer
+          readOnly: true
+        lab_code:
+          type: string
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        location:
+          type: string
+          readOnly: true
+        equipment_summary:
+          type: string
+          readOnly: true
+        capacity:
+          type: integer
+          readOnly: true
+        status:
+          type: string
+          readOnly: true
+        incharge_user_id:
+          type: integer
+          readOnly: true
+          nullable: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - capacity
+      - department_id
+      - equipment_summary
+      - id
+      - incharge_user_id
+      - lab_code
+      - location
+      - name
+      - status
+      - updated_at
+    LabResourceWrite:
+      type: object
+      properties:
+        department_id:
+          type: integer
+        lab_code:
+          type: string
+          default: ''
+          maxLength: 32
+        name:
+          type: string
+          maxLength: 160
+        location:
+          type: string
+          default: ''
+          maxLength: 160
+        equipment_summary:
+          type: string
+          default: ''
+        capacity:
+          type: integer
+          minimum: 0
+          default: 0
+        status:
+          allOf:
+          - $ref: '#/components/schemas/LabResourceWriteStatusEnum'
+          default: operational
+        incharge_user_id:
+          type: integer
+          nullable: true
+      required:
+      - name
+    LabResourceWriteStatusEnum:
+      enum:
+      - operational
+      - maintenance
+      - decommissioned
+      type: string
+      description: |-
+        * `operational` - operational
+        * `maintenance` - maintenance
+        * `decommissioned` - decommissioned
     LiftSanction:
       type: object
       properties:
@@ -2864,6 +4742,83 @@ components:
         * `revoked` - Revoked
         * `superseded` - Superseded
         * `expired` - Expired
+    OfficialChangeCreate:
+      type: object
+      properties:
+        department_id:
+          type: integer
+        field_name:
+          type: string
+          maxLength: 32
+        proposed_value:
+          type: string
+      required:
+      - department_id
+      - field_name
+      - proposed_value
+    OfficialChangeDecide:
+      type: object
+      properties:
+        approve:
+          type: boolean
+        note:
+          type: string
+          default: ''
+          maxLength: 300
+      required:
+      - approve
+    OfficialChangeRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department_id:
+          type: integer
+          readOnly: true
+        field_name:
+          type: string
+          readOnly: true
+        previous_value:
+          type: string
+          readOnly: true
+        proposed_value:
+          type: string
+          readOnly: true
+        status:
+          type: string
+          readOnly: true
+        proposed_by_user_id:
+          type: integer
+          readOnly: true
+        decided_by_user_id:
+          type: integer
+          readOnly: true
+          nullable: true
+        decided_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        decision_note:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - decided_at
+      - decided_by_user_id
+      - decision_note
+      - department_id
+      - field_name
+      - id
+      - previous_value
+      - proposed_by_user_id
+      - proposed_value
+      - status
     Ok:
       type: object
       properties:
@@ -3000,6 +4955,124 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Offer'
+    PatchedAnnouncementUpdate:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+        content:
+          type: string
+        target_roles:
+          type: array
+          items:
+            type: string
+        target_programs:
+          type: array
+          items:
+            type: string
+        target_academic_years:
+          type: array
+          items:
+            type: string
+    PatchedDepartmentGeneralUpdate:
+      type: object
+      properties:
+        description:
+          type: string
+        contact_email:
+          oneOf:
+          - type: string
+            format: email
+          - type: string
+            maxLength: 0
+        location:
+          type: string
+          maxLength: 160
+        website_url:
+          oneOf:
+          - type: string
+            format: uri
+          - type: string
+            maxLength: 0
+    PatchedDepartmentProfileWrite:
+      type: object
+      properties:
+        department_id:
+          type: integer
+        user_id:
+          type: integer
+        profile_kind:
+          allOf:
+          - $ref: '#/components/schemas/ProfileKindEnum'
+          default: student
+        display_name:
+          type: string
+          maxLength: 160
+        email:
+          oneOf:
+          - type: string
+            format: email
+            default: ''
+          - type: string
+            maxLength: 0
+        program:
+          type: string
+          default: ''
+          maxLength: 64
+        academic_year:
+          type: string
+          default: ''
+          maxLength: 32
+        designation_title:
+          type: string
+          default: ''
+          maxLength: 120
+        office_room:
+          type: string
+          default: ''
+          maxLength: 64
+        research_area:
+          type: string
+          default: ''
+          maxLength: 200
+        graduation_year:
+          type: integer
+          nullable: true
+        current_affiliation:
+          type: string
+          default: ''
+          maxLength: 160
+        academic_notes:
+          type: string
+          default: ''
+    PatchedDepartmentProgramWrite:
+      type: object
+      properties:
+        department_id:
+          type: integer
+        code:
+          type: string
+          default: ''
+          maxLength: 32
+        name:
+          type: string
+          maxLength: 160
+        degree_level:
+          type: string
+          default: UG
+          maxLength: 64
+        duration_years:
+          type: integer
+          maximum: 10
+          minimum: 1
+          default: 4
+        description:
+          type: string
+          default: ''
+        is_active:
+          type: boolean
+          default: true
     PatchedJobPosting:
       type: object
       properties:
@@ -3080,11 +5153,79 @@ components:
           type: string
           format: date-time
           readOnly: true
+    PatchedLabResourceWrite:
+      type: object
+      properties:
+        department_id:
+          type: integer
+        lab_code:
+          type: string
+          default: ''
+          maxLength: 32
+        name:
+          type: string
+          maxLength: 160
+        location:
+          type: string
+          default: ''
+          maxLength: 160
+        equipment_summary:
+          type: string
+          default: ''
+        capacity:
+          type: integer
+          minimum: 0
+          default: 0
+        status:
+          allOf:
+          - $ref: '#/components/schemas/LabResourceWriteStatusEnum'
+          default: operational
+        incharge_user_id:
+          type: integer
+          nullable: true
     PatchedRole:
       type: object
       properties:
         active_role:
           type: string
+    PatchedTimetableSlotUpdate:
+      type: object
+      properties:
+        slot_kind:
+          $ref: '#/components/schemas/SlotKindEnum'
+        program:
+          type: string
+          maxLength: 64
+        academic_year:
+          type: string
+          maxLength: 32
+        section:
+          type: string
+          maxLength: 32
+        course_code:
+          type: string
+          maxLength: 32
+        course_title:
+          type: string
+          maxLength: 160
+        faculty_user_id:
+          type: integer
+          nullable: true
+        room:
+          type: string
+          maxLength: 64
+        day_of_week:
+          type: integer
+          maximum: 6
+          minimum: 0
+        start_time:
+          type: string
+          format: time
+        end_time:
+          type: string
+          format: time
+        is_active:
+          type: boolean
     PlacementRecordDetail:
       type: object
       description: A student's own record, with what rules 22 and 24 still want from
@@ -3201,6 +5342,16 @@ components:
         * `certificate` - Certificate
         * `offer_letter` - Offer letter
         * `other` - Other
+    ProfileKindEnum:
+      enum:
+      - student
+      - faculty
+      - alumni
+      type: string
+      description: |-
+        * `student` - student
+        * `faculty` - faculty
+        * `alumni` - alumni
     Recommendation:
       type: object
       description: |-
@@ -3466,6 +5617,90 @@ components:
       - message
       - reason
       - route
+    RoleAssignmentCreate:
+      type: object
+      properties:
+        department_id:
+          type: integer
+        role_type:
+          $ref: '#/components/schemas/RoleTypeEnum'
+        user_id:
+          type: integer
+        valid_from:
+          type: string
+          format: date-time
+        valid_to:
+          type: string
+          format: date-time
+      required:
+      - department_id
+      - role_type
+      - user_id
+      - valid_from
+      - valid_to
+    RoleAssignmentRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department_id:
+          type: integer
+          readOnly: true
+        role_type:
+          type: string
+          readOnly: true
+        user_id:
+          type: integer
+          readOnly: true
+        valid_from:
+          type: string
+          format: date-time
+          readOnly: true
+        valid_to:
+          type: string
+          format: date-time
+          readOnly: true
+        status:
+          type: string
+          readOnly: true
+        assigned_by_user_id:
+          type: integer
+          readOnly: true
+        activated_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        revoked_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - activated_at
+      - assigned_by_user_id
+      - created_at
+      - department_id
+      - id
+      - revoked_at
+      - role_type
+      - status
+      - user_id
+      - valid_from
+      - valid_to
+    RoleTypeEnum:
+      enum:
+      - hod
+      - dept_admin
+      type: string
+      description: |-
+        * `hod` - hod
+        * `dept_admin` - dept_admin
     RoundOutcome:
       type: object
       properties:
@@ -3655,6 +5890,14 @@ components:
       - id
       - kind
       - username
+    SlotKindEnum:
+      enum:
+      - class
+      - lab
+      type: string
+      description: |-
+        * `class` - class
+        * `lab` - lab
     SourceEnum:
       enum:
       - campus
@@ -3691,6 +5934,164 @@ components:
       required:
       - available
       - season
+    StockMovementRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department_id:
+          type: integer
+          readOnly: true
+        item_id:
+          type: integer
+          readOnly: true
+        item_sku:
+          type: string
+          readOnly: true
+        item_name:
+          type: string
+          readOnly: true
+        stock_request_id:
+          type: integer
+          readOnly: true
+          nullable: true
+        movement_type:
+          type: string
+          readOnly: true
+        quantity_delta:
+          type: integer
+          readOnly: true
+        balance_after:
+          type: integer
+          readOnly: true
+        actor_user_id:
+          type: integer
+          readOnly: true
+        note:
+          type: string
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - actor_user_id
+      - balance_after
+      - created_at
+      - department_id
+      - id
+      - item_id
+      - item_name
+      - item_sku
+      - movement_type
+      - note
+      - quantity_delta
+      - stock_request_id
+    StockRequestCreate:
+      type: object
+      properties:
+        item_id:
+          type: integer
+        requested_quantity:
+          type: integer
+          minimum: 1
+        purpose:
+          type: string
+          default: ''
+          maxLength: 300
+      required:
+      - item_id
+      - requested_quantity
+    StockRequestDecide:
+      type: object
+      properties:
+        approve:
+          type: boolean
+        note:
+          type: string
+          default: ''
+          maxLength: 300
+      required:
+      - approve
+    StockRequestIssue:
+      type: object
+      properties:
+        note:
+          type: string
+          default: ''
+          maxLength: 300
+    StockRequestRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department_id:
+          type: integer
+          readOnly: true
+        item_id:
+          type: integer
+          readOnly: true
+        item_name:
+          type: string
+          readOnly: true
+        item_sku:
+          type: string
+          readOnly: true
+        requester_user_id:
+          type: integer
+          readOnly: true
+        requested_quantity:
+          type: integer
+          readOnly: true
+        purpose:
+          type: string
+          readOnly: true
+        status:
+          type: string
+          readOnly: true
+        hod_decided_by_user_id:
+          type: integer
+          readOnly: true
+          nullable: true
+        hod_decided_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        hod_note:
+          type: string
+          readOnly: true
+        issued_by_user_id:
+          type: integer
+          readOnly: true
+          nullable: true
+        issued_at:
+          type: string
+          format: date-time
+          readOnly: true
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - department_id
+      - hod_decided_at
+      - hod_decided_by_user_id
+      - hod_note
+      - id
+      - issued_at
+      - issued_by_user_id
+      - item_id
+      - item_name
+      - item_sku
+      - purpose
+      - requested_quantity
+      - requester_user_id
+      - status
     SubmitOfferLetter:
       type: object
       properties:
@@ -3698,6 +6099,116 @@ components:
           type: integer
       required:
       - document_id
+    TimetableSlotCreate:
+      type: object
+      properties:
+        department_id:
+          type: integer
+        slot_kind:
+          allOf:
+          - $ref: '#/components/schemas/SlotKindEnum'
+          default: class
+        program:
+          type: string
+          maxLength: 64
+        academic_year:
+          type: string
+          maxLength: 32
+        section:
+          type: string
+          default: A
+          maxLength: 32
+        course_code:
+          type: string
+          maxLength: 32
+        course_title:
+          type: string
+          maxLength: 160
+        faculty_user_id:
+          type: integer
+          nullable: true
+        room:
+          type: string
+          maxLength: 64
+        day_of_week:
+          type: integer
+          maximum: 6
+          minimum: 0
+        start_time:
+          type: string
+          format: time
+        end_time:
+          type: string
+          format: time
+      required:
+      - academic_year
+      - course_code
+      - course_title
+      - day_of_week
+      - department_id
+      - end_time
+      - program
+      - room
+      - start_time
+    TimetableSlotRead:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        department_id:
+          type: integer
+          readOnly: true
+        slot_kind:
+          type: string
+          readOnly: true
+        program:
+          type: string
+          readOnly: true
+        academic_year:
+          type: string
+          readOnly: true
+        section:
+          type: string
+          readOnly: true
+        course_code:
+          type: string
+          readOnly: true
+        course_title:
+          type: string
+          readOnly: true
+        faculty_user_id:
+          type: integer
+          readOnly: true
+          nullable: true
+        room:
+          type: string
+          readOnly: true
+        day_of_week:
+          type: integer
+          readOnly: true
+        start_time:
+          type: string
+          format: time
+          readOnly: true
+        end_time:
+          type: string
+          format: time
+          readOnly: true
+      required:
+      - academic_year
+      - course_code
+      - course_title
+      - day_of_week
+      - department_id
+      - end_time
+      - faculty_user_id
+      - id
+      - program
+      - room
+      - section
+      - slot_kind
+      - start_time
     TopicEnum:
       enum:
       - drive
